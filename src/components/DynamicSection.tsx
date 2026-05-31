@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { ChevronLeft, ChevronRight, ShoppingCart, Heart } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Heart, Plus, Minus } from 'lucide-react';
 import { Product, Category, HomepageSection } from '../types';
 import { usePublishedData } from '../contexts/PublishedDataContext';
 import LazyImage from './LazyImage';
@@ -19,7 +19,7 @@ export default function DynamicSection({ section, onProductClick, onCategoryClic
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const { addToCart } = useCart();
+  const { addToCart, isInCart, getItemQuantity, getCartItemId, updateQuantity } = useCart();
   const { favorites, toggleFavorite } = useFavorites();
   const { design } = useCardDesign(`custom_${section.id}`);
   const cardStyles = getCardStyles(design);
@@ -180,13 +180,45 @@ export default function DynamicSection({ section, onProductClick, onCategoryClic
                     <span className="text-sm text-gray-400 line-through">₹{product.compare_at_price}</span>
                   )}
                 </div>
-                <button
-                  onClick={(e) => handleAddToCart(e, product)}
-                  className={`w-full bg-teal-500 text-white py-2 font-bold hover:bg-teal-600 transition-colors flex items-center justify-center gap-2 ${cardStyles.button}`}
-                >
-                  <ShoppingCart className="w-4 h-4" />
-                  Add to Cart
-                </button>
+                {isInCart(product.id) && getItemQuantity(product.id) > 0 ? (
+                  <div
+                    className="flex items-center justify-between bg-gray-50 rounded-full border border-gray-200 h-9 sm:h-10"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const cid = getCartItemId(product.id);
+                        if (cid) {
+                          const q = getItemQuantity(product.id);
+                          if (q <= 1) updateQuantity(cid, 0);
+                          else updateQuantity(cid, q - 1);
+                        }
+                      }}
+                      className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-gray-600 hover:text-red-500 transition-colors rounded-full hover:bg-red-50"
+                    >
+                      <Minus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                    </button>
+                    <span className="text-sm sm:text-base font-bold text-gray-900 min-w-[20px] text-center">{getItemQuantity(product.id)}</span>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        addToCart(product);
+                      }}
+                      className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-gray-600 hover:text-teal-600 transition-colors rounded-full hover:bg-teal-50"
+                    >
+                      <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={(e) => handleAddToCart(e, product)}
+                    className="w-full flex items-center justify-center gap-1.5 bg-gray-900 text-white rounded-full h-9 sm:h-10 text-xs sm:text-sm font-medium hover:bg-gray-800 transition-all active:scale-[0.97]"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>Add</span>
+                  </button>
+                )}
               </>
             )}
             {!isProduct && category && (
