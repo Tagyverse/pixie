@@ -106,7 +106,7 @@ export default function TopBanner() {
       {/* Social Icons Row - Hanging from marquee bar */}
       {socialLinksVisible && socialLinks.length > 0 && (
         <div
-          className="flex flex-col items-center -mt-px pb-3"
+          className="flex flex-col items-center -mt-px pb-0"
           style={{ backgroundColor: '#FFFFFF' }}
         >
           <div className="flex items-center justify-center gap-4 sm:gap-5">
@@ -152,11 +152,11 @@ export default function TopBanner() {
               );
             })}
           </div>
-          {/* Header image */}
+          {/* Header image - overlaps carousel below */}
           <img
             src="/image copy.png"
             alt="Header"
-            className="w-40 sm:w-52 md:w-60 object-contain mt-2"
+            className="relative z-10 w-40 sm:w-52 md:w-60 object-contain mt-2 -mb-8 sm:-mb-10"
           />
         </div>
       )}
