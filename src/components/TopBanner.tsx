@@ -152,11 +152,11 @@ export default function TopBanner() {
               );
             })}
           </div>
-          {/* Header image - overlaps carousel below */}
+          {/* Header image */}
           <img
             src="/image copy.png"
             alt="Header"
-            className="relative z-10 w-40 sm:w-52 md:w-60 object-contain mt-2 -mb-8 sm:-mb-10"
+            className="relative z-10 w-40 sm:w-52 md:w-60 object-contain mt-2"
           />
         </div>
       )}

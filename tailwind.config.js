@@ -4,7 +4,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
+        sans: ['"DM Sans"', 'sans-serif'],
+        display: ['"Playfair Display"', 'serif'],
       },
       colors: {
         teal: {

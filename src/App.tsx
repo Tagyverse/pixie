@@ -244,22 +244,11 @@ function AppContent() {
       </div>
     );
 
-    const navigationElement = !hideNavigation ? (
-      <Navigation
-        currentPage={currentPage}
-        onNavigate={handleNavigate}
-        onLoginClick={() => setLoginModalOpen(true)}
-        onCartClick={() => setCartModalOpen(true)}
-        onOrdersClick={() => setOrdersSheetOpen(true)}
-        onProductClick={handleProductClick}
-      />
-    ) : null;
-
     switch (currentPage) {
       case 'home':
-        return <Home onNavigate={handleNavigate} onCartClick={() => setCartModalOpen(true)} navigationSlot={navigationElement} />;
+        return <Home onNavigate={handleNavigate} onCartClick={() => setCartModalOpen(true)} />;
       case 'shop':
-        return <>{navigationElement}<Shop onCartClick={() => setCartModalOpen(true)} /></>;
+        return <Shop onCartClick={() => setCartModalOpen(true)} />;
       case 'admin':
         return (
           <Suspense fallback={<LoadingFallback />}>
@@ -332,6 +321,14 @@ function AppContent() {
           {!hideNavigation && (
             <>
               <TopBanner />
+              <Navigation
+                currentPage={currentPage}
+                onNavigate={handleNavigate}
+                onLoginClick={() => setLoginModalOpen(true)}
+                onCartClick={() => setCartModalOpen(true)}
+                onOrdersClick={() => setOrdersSheetOpen(true)}
+                onProductClick={handleProductClick}
+              />
             </>
           )}
 
