@@ -38,6 +38,7 @@ interface InfoSectionData {
 interface HomeProps {
   onNavigate: (page: 'shop', categoryId?: string) => void;
   onCartClick: () => void;
+  navigationSlot?: React.ReactNode;
 }
 
 interface Policy {
@@ -47,7 +48,7 @@ interface Policy {
   isEnabled: boolean;
 }
 
-export default function Home({ onNavigate, onCartClick }: HomeProps) {
+export default function Home({ onNavigate, onCartClick, navigationSlot }: HomeProps) {
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [newArrivalCategories, setNewArrivalCategories] = useState<Category[]>([]);
@@ -485,6 +486,8 @@ export default function Home({ onNavigate, onCartClick }: HomeProps) {
           </div>
         </section>
       )}
+
+      {navigationSlot}
 
       {allSectionsOrder.map((section) => (
         <section key={section.id} className="w-full">

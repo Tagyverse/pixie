@@ -152,11 +152,11 @@ export default function TopBanner() {
               );
             })}
           </div>
-          {/* Logo below strings */}
+          {/* Header image */}
           <img
-            src="https://res.cloudinary.com/ds7pknmvg/image/upload/v1770820147/logo-pixieblooms_e09fgp.png"
-            alt="Logo"
-            className="w-28 h-28 sm:w-36 sm:h-36 object-contain mt-2"
+            src="/image copy.png"
+            alt="Header"
+            className="w-40 sm:w-52 md:w-60 object-contain mt-2"
           />
         </div>
       )}
