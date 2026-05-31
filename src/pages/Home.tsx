@@ -520,7 +520,7 @@ export default function Home({ onNavigate, onCartClick }: HomeProps) {
                       <div className="p-4">
                         <h3 className="text-base sm:text-lg font-semibold text-gray-900 flex items-center justify-between">
                           {category.name}
-                          <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 group-hover:translate-x-1 transition-transform duration-300" />
+                          <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
                         </h3>
                       </div>
                     </button>

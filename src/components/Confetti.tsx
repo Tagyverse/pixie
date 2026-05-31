@@ -2,32 +2,39 @@ import { useEffect, useState } from 'react';
 
 interface ConfettiProps {
   isActive: boolean;
+  originX?: number;
+  originY?: number;
   onComplete?: () => void;
 }
 
-export default function Confetti({ isActive, onComplete }: ConfettiProps) {
-  const [particles, setParticles] = useState<Array<{ id: number; left: number; delay: number; duration: number; color: string }>>([]);
+export default function Confetti({ isActive, originX, originY, onComplete }: ConfettiProps) {
+  const [particles, setParticles] = useState<Array<{ id: number; x: number; y: number; angle: number; speed: number; size: number; color: string; rotation: number }>>([]);
 
   useEffect(() => {
     if (isActive) {
-      const colors = ['#FF6B6B', '#4ECDC4', '#FFD93D', '#6BCB77', '#F38181', '#A8E6CF', '#FF8B94'];
-      const newParticles = Array.from({ length: 50 }, (_, i) => ({
+      const colors = ['#1B365D', '#C9A96E', '#F4C2C2', '#2C4A7C', '#D4AF37', '#FADADD', '#0F2440', '#E8C87A'];
+      const cx = originX ?? 50;
+      const cy = originY ?? 50;
+      const newParticles = Array.from({ length: 30 }, (_, i) => ({
         id: i,
-        left: Math.random() * 100,
-        delay: Math.random() * 0.3,
-        duration: 2 + Math.random() * 1,
+        x: cx,
+        y: cy,
+        angle: (Math.random() * 360) * (Math.PI / 180),
+        speed: 2 + Math.random() * 4,
+        size: 4 + Math.random() * 6,
         color: colors[Math.floor(Math.random() * colors.length)],
+        rotation: Math.random() * 360,
       }));
       setParticles(newParticles);
 
       const timer = setTimeout(() => {
         setParticles([]);
         onComplete?.();
-      }, 3000);
+      }, 1200);
 
       return () => clearTimeout(timer);
     }
-  }, [isActive, onComplete]);
+  }, [isActive, originX, originY, onComplete]);
 
   if (!isActive || particles.length === 0) return null;
 
@@ -36,13 +43,18 @@ export default function Confetti({ isActive, onComplete }: ConfettiProps) {
       {particles.map((particle) => (
         <div
           key={particle.id}
-          className="absolute -top-4 w-3 h-3 animate-confetti-fall"
+          className="absolute animate-confetti-burst"
           style={{
-            left: `${particle.left}%`,
-            animationDelay: `${particle.delay}s`,
-            animationDuration: `${particle.duration}s`,
+            left: `${particle.x}%`,
+            top: `${particle.y}%`,
+            width: `${particle.size}px`,
+            height: `${particle.size}px`,
             backgroundColor: particle.color,
-          }}
+            borderRadius: Math.random() > 0.5 ? '50%' : '2px',
+            transform: `rotate(${particle.rotation}deg)`,
+            '--burst-x': `${Math.cos(particle.angle) * particle.speed * 40}px`,
+            '--burst-y': `${Math.sin(particle.angle) * particle.speed * 40 - 60}px`,
+          } as React.CSSProperties}
         />
       ))}
     </div>

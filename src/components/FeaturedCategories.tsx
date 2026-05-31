@@ -1,9 +1,10 @@
 import { ShoppingCart, Heart, Plus, Minus } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { usePublishedData } from '../contexts/PublishedDataContext';
 import { useCart } from '../contexts/CartContext';
 import { useFavorites } from '../contexts/FavoritesContext';
 import LazyImage from './LazyImage';
+import Confetti from './Confetti';
 import type { Category, Product } from '../types';
 import { useCardDesign, getCardStyles } from '../hooks/useCardDesign';
 import { objectToArray } from '../utils/publishedData';
@@ -24,10 +25,21 @@ export default function FeaturedCategories({ onNavigate, onAddToCart, onCartClic
   const { data: publishedData } = usePublishedData();
   const [categoriesWithProducts, setCategoriesWithProducts] = useState<CategoryWithProducts[]>([]);
   const [loading, setLoading] = useState(true);
+  const [confettiActive, setConfettiActive] = useState(false);
+  const [confettiOrigin, setConfettiOrigin] = useState({ x: 50, y: 50 });
   const { isInCart, addToCart, getItemQuantity, getCartItemId, updateQuantity } = useCart();
   const { toggleFavorite, isFavorite } = useFavorites();
   const { design } = useCardDesign('shop_by_category');
   const cardStyles = getCardStyles(design);
+
+  const handleAddToCart = useCallback((product: Product, e: React.MouseEvent) => {
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    const x = ((rect.left + rect.width / 2) / window.innerWidth) * 100;
+    const y = ((rect.top + rect.height / 2) / window.innerHeight) * 100;
+    setConfettiOrigin({ x, y });
+    setConfettiActive(true);
+    addToCart(product);
+  }, [addToCart]);
 
   useEffect(() => {
     if (!publishedData) {
@@ -145,7 +157,7 @@ export default function FeaturedCategories({ onNavigate, onAddToCart, onCartClic
                                   else updateQuantity(cartItemId, qty - 1);
                                 }
                               }}
-                              className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-teal-700 hover:text-red-500 transition-colors rounded-full hover:bg-red-50"
+                              className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-teal-700 hover:text-red-500 transition-colors rounded-full"
                             >
                               <Minus className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                             </button>
@@ -153,9 +165,9 @@ export default function FeaturedCategories({ onNavigate, onAddToCart, onCartClic
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
-                                addToCart(product);
+                                handleAddToCart(product, e);
                               }}
-                              className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-teal-700 hover:text-teal-900 transition-colors rounded-full hover:bg-teal-100"
+                              className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-teal-700 hover:text-teal-900 transition-colors rounded-full"
                             >
                               <Plus className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                             </button>
@@ -164,9 +176,9 @@ export default function FeaturedCategories({ onNavigate, onAddToCart, onCartClic
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
-                              onAddToCart(product);
+                              handleAddToCart(product, e);
                             }}
-                            className="w-full flex items-center justify-center gap-1 bg-teal-600 text-white rounded-full h-8 sm:h-9 text-[11px] sm:text-xs font-medium hover:bg-teal-700 transition-all active:scale-[0.97]"
+                            className="w-full flex items-center justify-center gap-1 bg-teal-600 text-white rounded-full h-8 sm:h-9 text-[11px] sm:text-xs font-medium hover:bg-teal-700 transition-colors active:scale-[0.97]"
                           >
                             <Plus className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                             <span>Add</span>
@@ -190,6 +202,13 @@ export default function FeaturedCategories({ onNavigate, onAddToCart, onCartClic
           </div>
         </div>
       ))}
+
+      <Confetti
+        isActive={confettiActive}
+        originX={confettiOrigin.x}
+        originY={confettiOrigin.y}
+        onComplete={() => setConfettiActive(false)}
+      />
     </div>
   );
 }

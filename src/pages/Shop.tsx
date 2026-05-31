@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Filter, SlidersHorizontal, ShoppingCart, Heart, Star, X, MessageCircle, Shield, Plus, Minus } from 'lucide-react';
 import { db } from '../lib/firebase';
 import { ref, get } from 'firebase/database';
@@ -13,6 +13,7 @@ import ShimmerLoader from '../components/ShimmerLoader';
 import FilterBottomSheet from '../components/FilterBottomSheet';
 import LazyImage from '../components/LazyImage';
 import SmartFeatureFAB from '../components/SmartFeatureFAB';
+import Confetti from '../components/Confetti';
 import ColorMatchProductList from '../components/ColorMatchProductList';
 import WhatsAppFAB from '../components/WhatsAppFAB';
 import { onValue } from 'firebase/database';
@@ -41,6 +42,9 @@ export default function Shop({ onCartClick }: ShopProps) {
   const [sortBy, setSortBy] = useState('featured');
   const [showInStock, setShowInStock] = useState(false);
   const [showOnSale, setShowOnSale] = useState(false);
+  const [confettiActive, setConfettiActive] = useState(false);
+  const [confettiOrigin, setConfettiOrigin] = useState({ x: 50, y: 50 });
+  const [selectedSizes, setSelectedSizes] = useState<Record<string, string>>({});
   const [showSmartFeatureFAB, setShowSmartFeatureFAB] = useState(false);
   const [showTryOn, setShowTryOn] = useState(false);
   const [showColorMatchList, setShowColorMatchList] = useState(false);
@@ -185,6 +189,20 @@ export default function Shop({ onCartClick }: ShopProps) {
 
     fetchProducts();
   }, [selectedCategory, sortBy, showInStock, showOnSale]);
+
+  const handleAddToCart = useCallback((product: Product, e: React.MouseEvent) => {
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    const x = ((rect.left + rect.width / 2) / window.innerWidth) * 100;
+    const y = ((rect.top + rect.height / 2) / window.innerHeight) * 100;
+    setConfettiOrigin({ x, y });
+    setConfettiActive(true);
+    const selectedSize = selectedSizes[product.id];
+    if (selectedSize && product.size_pricing?.[selectedSize]) {
+      addToCart({ ...product, price: product.size_pricing[selectedSize].price, default_size: selectedSize });
+    } else {
+      addToCart(product);
+    }
+  }, [addToCart, selectedSizes]);
 
   return (
     <div className="min-h-screen bg-white">
@@ -357,35 +375,37 @@ export default function Shop({ onCartClick }: ShopProps) {
                           alt={product.name}
                           className="w-full h-full object-cover"
                         />
-                        {product.featured && (
-                          <span className="absolute top-2 left-2 bg-white/90 backdrop-blur-sm text-[10px] sm:text-xs font-semibold text-gray-700 px-2 py-0.5 rounded-md">
-                            Featured
-                          </span>
-                        )}
-                        {discount > 0 && (
-                          <span className="absolute top-2 right-10 sm:right-11 bg-red-500 text-white text-[10px] sm:text-xs font-bold px-1.5 py-0.5 rounded-md">
-                            -{discount}%
-                          </span>
-                        )}
+                        <div className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 flex flex-wrap gap-1">
+                          {product.featured && (
+                            <span className="bg-white/90 backdrop-blur-sm text-[9px] sm:text-[11px] font-semibold text-gray-700 px-1.5 sm:px-2 py-0.5 rounded">
+                              Featured
+                            </span>
+                          )}
+                          {discount > 0 && (
+                            <span className="bg-red-500 text-white text-[9px] sm:text-[11px] font-bold px-1.5 sm:px-2 py-0.5 rounded">
+                              -{discount}%
+                            </span>
+                          )}
+                        </div>
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
                             toggleFavorite(product.id);
                           }}
-                          className="absolute top-2 right-2 p-1.5 sm:p-2 rounded-full bg-white/90 backdrop-blur-sm transition-colors"
+                          className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 p-1.5 sm:p-2 rounded-full bg-white/90 backdrop-blur-sm"
                         >
                           <Heart className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isFavorite(product.id) ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
                         </button>
                         {!product.in_stock && (
                           <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] flex items-center justify-center">
-                            <span className="bg-white text-gray-900 px-3 py-1.5 rounded-lg font-bold text-xs sm:text-sm">Out of Stock</span>
+                            <span className="bg-white text-gray-900 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg font-bold text-[10px] sm:text-xs">Out of Stock</span>
                           </div>
                         )}
                       </div>
 
                       <div className="p-2.5 sm:p-3.5">
                         <h3
-                          className="font-semibold text-gray-900 text-xs sm:text-sm leading-tight line-clamp-2 mb-1.5 cursor-pointer hover:text-teal-600 transition-colors"
+                          className="font-semibold text-gray-900 text-xs sm:text-sm leading-tight line-clamp-2 mb-1.5 cursor-pointer"
                           onClick={() => {
                             setSelectedProduct(product);
                             setShowProductDetails(true);
@@ -395,11 +415,33 @@ export default function Shop({ onCartClick }: ShopProps) {
                         </h3>
 
                         <div className="flex items-baseline gap-1.5 mb-2">
-                          <span className="text-sm sm:text-base font-bold text-gray-900">₹{product.price}</span>
+                          <span className="text-sm sm:text-base font-bold text-gray-900">
+                            ₹{selectedSizes[product.id] && product.size_pricing?.[selectedSizes[product.id]]
+                              ? product.size_pricing[selectedSizes[product.id]].price
+                              : product.price}
+                          </span>
                           {product.compare_at_price && (
                             <span className="text-[10px] sm:text-xs text-gray-400 line-through">₹{product.compare_at_price}</span>
                           )}
                         </div>
+
+                        {product.sizes && product.sizes.length > 0 && (
+                          <div className="flex flex-wrap gap-1 mb-2">
+                            {product.sizes.map((size) => (
+                              <button
+                                key={size}
+                                onClick={() => setSelectedSizes(prev => ({ ...prev, [product.id]: prev[product.id] === size ? '' : size }))}
+                                className={`px-2 py-0.5 rounded text-[10px] sm:text-xs font-medium border transition-colors ${
+                                  selectedSizes[product.id] === size
+                                    ? 'bg-gray-900 text-white border-gray-900'
+                                    : 'bg-white text-gray-600 border-gray-200'
+                                }`}
+                              >
+                                {size}
+                              </button>
+                            ))}
+                          </div>
+                        )}
 
                         {inCart && qty > 0 ? (
                           <div className="flex items-center justify-between bg-teal-50 rounded-full border border-teal-200 h-9 sm:h-10">
@@ -413,23 +455,23 @@ export default function Shop({ onCartClick }: ShopProps) {
                                   }
                                 }
                               }}
-                              className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-teal-700 hover:text-red-500 transition-colors rounded-full hover:bg-red-50"
+                              className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-teal-700 hover:text-red-500 transition-colors rounded-full"
                             >
                               <Minus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                             </button>
                             <span className="text-sm sm:text-base font-bold text-teal-800 min-w-[20px] text-center">{qty}</span>
                             <button
-                              onClick={() => addToCart(product)}
-                              className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-teal-700 hover:text-teal-900 transition-colors rounded-full hover:bg-teal-100"
+                              onClick={(e) => handleAddToCart(product, e)}
+                              className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-teal-700 hover:text-teal-900 transition-colors rounded-full"
                             >
                               <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                             </button>
                           </div>
                         ) : (
                           <button
-                            onClick={() => addToCart(product)}
+                            onClick={(e) => handleAddToCart(product, e)}
                             disabled={!product.in_stock}
-                            className="w-full flex items-center justify-center gap-1.5 bg-teal-600 text-white rounded-full h-9 sm:h-10 text-xs sm:text-sm font-medium hover:bg-teal-700 transition-all active:scale-[0.97] disabled:opacity-40 disabled:cursor-not-allowed"
+                            className="w-full flex items-center justify-center gap-1.5 bg-teal-600 text-white rounded-full h-9 sm:h-10 text-xs sm:text-sm font-medium hover:bg-teal-700 transition-colors active:scale-[0.97] disabled:opacity-40 disabled:cursor-not-allowed"
                           >
                             <Plus className="w-3.5 h-3.5" />
                             <span>Add</span>
@@ -490,6 +532,13 @@ export default function Shop({ onCartClick }: ShopProps) {
       <ColorMatchProductList
         isOpen={showColorMatchList}
         onClose={() => setShowColorMatchList(false)}
+      />
+
+      <Confetti
+        isActive={confettiActive}
+        originX={confettiOrigin.x}
+        originY={confettiOrigin.y}
+        onComplete={() => setConfettiActive(false)}
       />
     </div>
   );
