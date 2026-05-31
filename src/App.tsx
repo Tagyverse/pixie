@@ -13,7 +13,6 @@ import MyOrdersSheet from './components/MyOrdersSheet';
 import PurchaseNotification from './components/PurchaseNotification';
 import OfferDialog from './components/OfferDialog';
 import WelcomeCouponDialog from './components/WelcomeCouponDialog';
-import FeedbackPanel from './components/FeedbackPanel';
 import ProductDetailsSheet from './components/ProductDetailsSheet';
 import SplashScreen from './components/SplashScreen';
 import Footer from './components/Footer';
@@ -337,7 +336,6 @@ function AppContent() {
           <PurchaseNotification />
           <OfferDialog />
           <WelcomeCouponDialog />
-          <FeedbackPanel />
 
           <LoginModal isOpen={loginModalOpen} onClose={() => setLoginModalOpen(false)} />
           <CartModal

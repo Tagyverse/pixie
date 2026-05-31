@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Mail, Phone, MapPin, Facebook, Instagram, Twitter, Linkedin, Youtube, Heart } from 'lucide-react';
+import { Mail, Phone, MapPin, Facebook, Instagram, Twitter, Linkedin, Youtube, Heart, MessageSquare } from 'lucide-react';
 import { usePublishedData } from '../contexts/PublishedDataContext';
+import FeedbackModal from './FeedbackModal';
 
 interface FooterConfig {
   is_visible: boolean;
@@ -38,6 +39,7 @@ interface FooterProps {
 export default function Footer({ onNavigate }: FooterProps) {
   const { data: publishedData } = usePublishedData();
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
+  const [showFeedback, setShowFeedback] = useState(false);
   
   const config = publishedData?.footer_config as FooterConfig | null;
 
@@ -219,9 +221,19 @@ export default function Footer({ onNavigate }: FooterProps) {
         >
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-center md:text-left">{config.copyrightText}</p>
-            <p className="text-sm flex items-center gap-1">
-              Made with <Heart size={16} style={{ color: config.accentColor }} fill={config.accentColor} /> for you
-            </p>
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => setShowFeedback(true)}
+                className="flex items-center gap-1.5 text-sm font-medium px-3 py-1.5 rounded-full border transition-all hover:scale-105"
+                style={{ borderColor: config.accentColor, color: config.linkColor }}
+              >
+                <MessageSquare size={14} />
+                Feedback
+              </button>
+              <p className="text-sm flex items-center gap-1">
+                Made with <Heart size={16} style={{ color: config.accentColor }} fill={config.accentColor} /> for you
+              </p>
+            </div>
           </div>
           <div className="text-center mt-4 pt-4" style={{ borderColor: config.accentColor + '20', borderTopWidth: '1px' }}>
             <p className="text-xs" style={{ color: config.textColor, opacity: 0.7 }}>
@@ -230,6 +242,8 @@ export default function Footer({ onNavigate }: FooterProps) {
           </div>
         </div>
       </div>
+
+      {showFeedback && <FeedbackModal onClose={() => setShowFeedback(false)} />}
     </footer>
   );
 }

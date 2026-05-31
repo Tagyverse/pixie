@@ -1,11 +1,10 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { Filter, SlidersHorizontal, ShoppingCart, Heart, Star, X, MessageCircle, Shield, Plus, Minus } from 'lucide-react';
 import { db } from '../lib/firebase';
 import { ref, get } from 'firebase/database';
 import { useCart } from '../contexts/CartContext';
 import { useFavorites } from '../contexts/FavoritesContext';
 import { useCardDesign, getCardStyles } from '../hooks/useCardDesign';
-import { useScrollReveal } from '../hooks/useScrollReveal';
 import EnquiryModal from '../components/EnquiryModal';
 import ProductDetailsSheet from '../components/ProductDetailsSheet';
 import WhatsAppCustomization from '../components/WhatsAppCustomization';
@@ -30,7 +29,6 @@ export default function Shop({ onCartClick }: ShopProps) {
   const { toggleFavorite, isFavorite } = useFavorites();
   const { design } = useCardDesign('shop_page');
   const cardStyles = getCardStyles(design);
-  const scrollRef = useScrollReveal();
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -236,7 +234,7 @@ export default function Shop({ onCartClick }: ShopProps) {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" ref={scrollRef}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
           <aside className="lg:w-64 flex-shrink-0">
             <div className="sticky top-24 space-y-6">
@@ -331,7 +329,7 @@ export default function Shop({ onCartClick }: ShopProps) {
                 <p className="text-gray-500">Try adjusting your filters or category selection</p>
               </div>
             ) : (
-              <div className="scroll-reveal grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 lg:gap-6">
+              <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 lg:gap-6">
                 {products.map((product, index) => {
                   const inCart = isInCart(product.id);
                   const qty = getItemQuantity(product.id);
@@ -343,8 +341,8 @@ export default function Shop({ onCartClick }: ShopProps) {
                   return (
                     <div
                       key={product.id}
-                      className={`card-stagger group bg-white overflow-hidden transition-all duration-300 ${cardStyles.container || 'border border-gray-100 rounded-2xl'}`}
-                      style={{ ...cardStyles.style, animationDelay: `${index * 80}ms` }}
+                      className={`group bg-white overflow-hidden transition-all duration-300 ${cardStyles.container || 'border border-gray-100 rounded-2xl'}`}
+                      style={cardStyles.style}
                       onMouseEnter={(e) => {
                         if (cardStyles.hoverTransform) {
                           e.currentTarget.style.transform = cardStyles.hoverTransform;

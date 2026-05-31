@@ -18,7 +18,6 @@ import LazyImage from '../components/LazyImage';
 import { useCart } from '../contexts/CartContext';
 import { useFavorites } from '../contexts/FavoritesContext';
 import { useCardDesign, getCardStyles } from '../hooks/useCardDesign';
-import { useScrollReveal } from '../hooks/useScrollReveal';
 import DynamicSection from '../components/DynamicSection';
 import InfoSection from '../components/InfoSection';
 import VideoSection from '../components/VideoSection';
@@ -101,7 +100,6 @@ export default function Home({ onNavigate, onCartClick }: HomeProps) {
   const { toggleFavorite, isFavorite } = useFavorites();
   const { design: allCategoriesDesign } = useCardDesign('all_categories');
   const allCategoriesCardStyles = getCardStyles(allCategoriesDesign);
-  const scrollRef = useScrollReveal();
 
   useEffect(() => {
     const handleOpenProductDetails = (event: CustomEvent) => {
@@ -429,7 +427,7 @@ export default function Home({ onNavigate, onCartClick }: HomeProps) {
   }
 
   return (
-    <div className="min-h-screen bg-white" ref={scrollRef}>
+    <div className="min-h-screen bg-white">
       {carouselSettings.is_visible && carouselImages.length > 0 && (
         <section className="relative w-full overflow-hidden group bg-gray-100">
           {/* Responsive height: mobile first */}
@@ -489,7 +487,7 @@ export default function Home({ onNavigate, onCartClick }: HomeProps) {
       )}
 
       {allSectionsOrder.map((section) => (
-        <section key={section.id} className="w-full scroll-reveal">
+        <section key={section.id} className="w-full">
           {section.id === 'all_categories' && (defaultSectionsVisibility.all_categories !== false) && categories.length > 0 && (
             <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-white">
               <div className="max-w-7xl mx-auto">
@@ -647,7 +645,7 @@ export default function Home({ onNavigate, onCartClick }: HomeProps) {
         </section>
       ))}
 
-      <section className="scroll-reveal py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white">
+      <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8 sm:mb-10">
             <span className="text-xs sm:text-sm font-semibold text-teal-600 tracking-widest uppercase">Why Choose Us</span>

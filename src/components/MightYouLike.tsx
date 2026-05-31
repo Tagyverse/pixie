@@ -50,7 +50,7 @@ export default function MightYouLike({ onProductClick, onCartClick }: MightYouLi
             return (
               <div
                 key={product.id}
-                className="card-stagger group bg-white rounded-xl border border-gray-100 overflow-hidden transition-all duration-300 hover:-translate-y-0.5 cursor-pointer"
+                className="group bg-white rounded-xl border border-gray-100 overflow-hidden transition-all duration-300 hover:-translate-y-0.5 cursor-pointer"
                 style={{ animationDelay: `${index * 80}ms` }}
                 onClick={() => onProductClick(product)}
               >
