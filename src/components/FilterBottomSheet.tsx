@@ -66,12 +66,12 @@ export default function FilterBottomSheet({
                   }}
                   className={`px-3.5 py-2 text-[11px] font-medium tracking-wide transition-all duration-300 rounded-full ${
                     selectedCategory === null
-                      ? 'bg-[#3D3321] text-white ring-1 ring-[#C4B590]/40'
-                      : 'bg-[#F5EDE3] text-[#5C4A2F] hover:bg-[#EBE0D2] border border-[#D4C9B5]'
+                      ? 'bg-[#2D4A3A] text-white ring-1 ring-[#7BAF7B]/40 shadow-sm'
+                      : 'bg-[#F0F5F0] text-[#3D4A3D] hover:bg-[#E5EDE5] border border-[#C8D4C8]'
                   }`}
                 >
                   <span className="flex items-center gap-1.5">
-                    {selectedCategory === null && <span className="w-1.5 h-1.5 rounded-full bg-[#C4B590] animate-[pulse_2s_ease-in-out_infinite]" />}
+                    {selectedCategory === null && <span className="w-1.5 h-1.5 rounded-full bg-[#7BAF7B] animate-[pulse_2s_ease-in-out_infinite]" />}
                     All
                   </span>
                 </button>
@@ -84,12 +84,12 @@ export default function FilterBottomSheet({
                     }}
                     className={`px-3.5 py-2 text-[11px] font-medium tracking-wide transition-all duration-300 rounded-full ${
                       selectedCategory === category.id
-                        ? 'bg-[#3D3321] text-white ring-1 ring-[#C4B590]/40'
-                        : 'bg-[#F5EDE3] text-[#5C4A2F] hover:bg-[#EBE0D2] border border-[#D4C9B5]'
+                        ? 'bg-[#2D4A3A] text-white ring-1 ring-[#7BAF7B]/40 shadow-sm'
+                        : 'bg-[#F0F5F0] text-[#3D4A3D] hover:bg-[#E5EDE5] border border-[#C8D4C8]'
                     }`}
                   >
                     <span className="flex items-center gap-1.5">
-                      {selectedCategory === category.id && <span className="w-1.5 h-1.5 rounded-full bg-[#C4B590] animate-[pulse_2s_ease-in-out_infinite]" />}
+                      {selectedCategory === category.id && <span className="w-1.5 h-1.5 rounded-full bg-[#7BAF7B] animate-[pulse_2s_ease-in-out_infinite]" />}
                       {category.name}
                     </span>
                   </button>

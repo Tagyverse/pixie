@@ -31,9 +31,9 @@ export default function Navigation({ currentPage, onNavigate, onLoginClick, onCa
 
   const [navStyle, setNavStyle] = useState({
     background: '#FDF6EE',
-    text: '#5C4A2F',
-    activeTab: '#3D3321',
-    inactiveButton: '#F5EDE3',
+    text: '#3D4A3D',
+    activeTab: '#2D4A3A',
+    inactiveButton: '#F5F0EA',
     borderRadius: 'full',
     buttonSize: 'md',
     themeMode: 'default'
@@ -345,7 +345,7 @@ function NavPill({ active, onClick, icon, label, navStyle, badge }: NavPillProps
         text-xs sm:text-sm font-semibold transition-all duration-200
         ${active
           ? 'shadow-md'
-          : 'border border-[#D4C9B5] hover:border-[#9B8B6B] hover:shadow-sm'
+          : 'border border-[#C8D4C8] hover:border-[#6B8F6B] hover:shadow-sm'
         }
       `}
       style={{
@@ -356,16 +356,16 @@ function NavPill({ active, onClick, icon, label, navStyle, badge }: NavPillProps
       <span
         className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center flex-shrink-0"
         style={{
-          backgroundColor: active ? '#8B7D3C' : '#FFFFFF',
-          border: active ? '1.5px solid #C4B590' : '1.5px solid #D4C9B5',
-          color: active ? '#FFFFFF' : '#6B5E3F',
+          backgroundColor: active ? '#5C8A5C' : '#FFFFFF',
+          border: active ? '1.5px solid #7BAF7B' : '1.5px solid #C8D4C8',
+          color: active ? '#FFFFFF' : '#4A6B4A',
         }}
       >
         {icon}
       </span>
       <span className="whitespace-nowrap">{label}</span>
       {active && (
-        <span className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-5 h-[2px] rounded-full bg-[#C4B590]" />
+        <span className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-5 h-[2px] rounded-full bg-[#7BAF7B]" />
       )}
 
       {badge !== undefined && (

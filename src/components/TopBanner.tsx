@@ -106,15 +106,15 @@ export default function TopBanner() {
       {/* Social Icons Row - Hanging from marquee bar */}
       {socialLinksVisible && socialLinks.length > 0 && (
         <div
-          className="flex flex-col items-center -mt-px pb-2 sm:pb-3"
+          className="flex flex-col items-center -mt-px pb-3"
           style={{ backgroundColor: '#FFFFFF' }}
         >
-          <div className="flex items-center justify-center gap-3 sm:gap-5">
+          <div className="flex items-center justify-center gap-4 sm:gap-5">
             {socialLinks.map((social, idx) => {
               const IconComponent = PLATFORM_ICONS[social.platform] || LinkIcon;
               const iconColor = PLATFORM_COLORS[social.platform] || '#6B5E3F';
               const isLong = idx % 2 === 1;
-              const stringHeight = isLong ? 'h-5 sm:h-7' : 'h-3 sm:h-4';
+              const stringHeight = isLong ? 'h-6 sm:h-7' : 'h-3.5 sm:h-4';
               return (
                 <div
                   key={social.id}
@@ -126,14 +126,14 @@ export default function TopBanner() {
                 >
                   {/* Thread/string */}
                   <div className={`w-px ${stringHeight}`} style={{ background: 'linear-gradient(to bottom, #8B7D3C, #C4B590)' }}></div>
-                  <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full -mt-px mb-0.5" style={{ backgroundColor: '#C4B590' }}></div>
+                  <div className="w-1.5 h-1.5 rounded-full -mt-px mb-0.5" style={{ backgroundColor: '#C4B590' }}></div>
                   {/* Icon circle */}
                   <a
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={social.platform}
-                    className="w-7 h-7 sm:w-10 sm:h-10 rounded-full border sm:border-2 flex items-center justify-center transition-all hover:scale-110 hover:shadow-md"
+                    className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border-2 flex items-center justify-center transition-all hover:scale-110 hover:shadow-md"
                     style={{
                       borderColor: '#C4B590',
                       backgroundColor: '#FFFFFF',
@@ -143,7 +143,7 @@ export default function TopBanner() {
                       <ThreadsIcon color={iconColor} />
                     ) : (
                       <IconComponent
-                        className="w-3 h-3 sm:w-4.5 sm:h-4.5"
+                        className="w-4 h-4 sm:w-4.5 sm:h-4.5"
                         style={{ color: iconColor }}
                       />
                     )}
@@ -156,7 +156,7 @@ export default function TopBanner() {
           <img
             src="https://res.cloudinary.com/ds7pknmvg/image/upload/v1770820147/logo-pixieblooms_e09fgp.png"
             alt="Logo"
-            className="w-16 h-16 sm:w-24 sm:h-24 object-contain mt-1.5 sm:mt-2"
+            className="w-28 h-28 sm:w-36 sm:h-36 object-contain mt-2"
           />
         </div>
       )}
