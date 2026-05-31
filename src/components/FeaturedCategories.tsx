@@ -77,79 +77,87 @@ export default function FeaturedCategories({ onNavigate, onAddToCart, onCartClic
               )}
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4 lg:gap-5">
               {products.map((product) => {
                 const inCart = isInCart(product.id);
                 const qty = getItemQuantity(product.id);
                 const cartItemId = getCartItemId(product.id);
+                const discount = product.compare_at_price && product.compare_at_price > product.price
+                  ? Math.round(((product.compare_at_price - product.price) / product.compare_at_price) * 100)
+                  : 0;
 
                 return (
                   <div
                     key={product.id}
-                    className={cardStyles.container}
+                    className="group bg-white rounded-xl border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 cursor-pointer"
+                    style={cardStyles.style}
                     onClick={() => onProductClick(product)}
                   >
-                    <div className="relative">
+                    <div className="relative aspect-square overflow-hidden bg-gray-50" style={cardStyles.imageStyle}>
                       <LazyImage
                         src={product.image_url}
                         alt={product.name}
-                        className={cardStyles.image}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
+                      {discount > 0 && (
+                        <span className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 bg-red-500 text-white text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded-md">
+                          {discount}% OFF
+                        </span>
+                      )}
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
                           toggleFavorite(product);
                         }}
-                        className="absolute top-2 right-2 bg-white/90 p-1.5 sm:p-2 rounded-full hover:bg-white transition-all"
+                        className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-white/90 p-1.5 rounded-full hover:bg-white transition-all shadow-sm"
                       >
                         <Heart
-                          className={`w-4 h-4 sm:w-5 sm:h-5 ${
-                            isFavorite(product.id) ? 'fill-red-500 text-red-500' : 'text-gray-600'
+                          className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${
+                            isFavorite(product.id) ? 'fill-red-500 text-red-500' : 'text-gray-400'
                           }`}
                         />
                       </button>
                     </div>
 
-                    <div className={cardStyles.content}>
-                      <h3 className={cardStyles.title}>{product.name}</h3>
+                    <div className="p-2.5 sm:p-3">
+                      <h3 className="font-medium text-gray-900 text-xs sm:text-sm leading-tight line-clamp-2 mb-1.5">
+                        {product.name}
+                      </h3>
 
-                      <div className="flex items-baseline gap-1.5 mt-1">
-                        <span className={cardStyles.price}>₹{product.price}</span>
+                      <div className="flex items-baseline gap-1.5 mb-2.5">
+                        <span className="text-sm sm:text-base font-bold text-gray-900">₹{product.price}</span>
                         {product.compare_at_price && product.compare_at_price > product.price && (
-                          <span className={cardStyles.comparePrice}>₹{product.compare_at_price}</span>
+                          <span className="text-[10px] sm:text-xs text-gray-400 line-through">₹{product.compare_at_price}</span>
                         )}
                       </div>
 
-                      <div className="mt-3">
+                      <div>
                         {inCart && qty > 0 ? (
                           <div
-                            className="flex items-center justify-between bg-gray-50 rounded-full border border-gray-200 h-9 sm:h-10"
+                            className="flex items-center justify-between bg-teal-50 rounded-full border border-teal-200 h-8 sm:h-9"
                             onClick={(e) => e.stopPropagation()}
                           >
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
                                 if (cartItemId) {
-                                  if (qty <= 1) {
-                                    updateQuantity(cartItemId, 0);
-                                  } else {
-                                    updateQuantity(cartItemId, qty - 1);
-                                  }
+                                  if (qty <= 1) updateQuantity(cartItemId, 0);
+                                  else updateQuantity(cartItemId, qty - 1);
                                 }
                               }}
-                              className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-gray-600 hover:text-red-500 transition-colors rounded-full hover:bg-red-50"
+                              className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-teal-700 hover:text-red-500 transition-colors rounded-full hover:bg-red-50"
                             >
-                              <Minus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                              <Minus className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                             </button>
-                            <span className="text-sm sm:text-base font-bold text-gray-900 min-w-[20px] text-center">{qty}</span>
+                            <span className="text-xs sm:text-sm font-bold text-teal-800 min-w-[16px] text-center">{qty}</span>
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
                                 addToCart(product);
                               }}
-                              className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-gray-600 hover:text-teal-600 transition-colors rounded-full hover:bg-teal-50"
+                              className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-teal-700 hover:text-teal-900 transition-colors rounded-full hover:bg-teal-100"
                             >
-                              <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                              <Plus className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                             </button>
                           </div>
                         ) : (
@@ -158,9 +166,9 @@ export default function FeaturedCategories({ onNavigate, onAddToCart, onCartClic
                               e.stopPropagation();
                               onAddToCart(product);
                             }}
-                            className="w-full flex items-center justify-center gap-1.5 bg-gray-900 text-white rounded-full h-9 sm:h-10 text-xs sm:text-sm font-medium hover:bg-gray-800 transition-all active:scale-[0.97]"
+                            className="w-full flex items-center justify-center gap-1 bg-teal-600 text-white rounded-full h-8 sm:h-9 text-[11px] sm:text-xs font-medium hover:bg-teal-700 transition-all active:scale-[0.97]"
                           >
-                            <Plus className="w-3.5 h-3.5" />
+                            <Plus className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                             <span>Add</span>
                           </button>
                         )}

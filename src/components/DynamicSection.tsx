@@ -182,7 +182,7 @@ export default function DynamicSection({ section, onProductClick, onCategoryClic
                 </div>
                 {isInCart(product.id) && getItemQuantity(product.id) > 0 ? (
                   <div
-                    className="flex items-center justify-between bg-gray-50 rounded-full border border-gray-200 h-9 sm:h-10"
+                    className="flex items-center justify-between bg-teal-50 rounded-full border border-teal-200 h-8 sm:h-9"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <button
@@ -195,27 +195,27 @@ export default function DynamicSection({ section, onProductClick, onCategoryClic
                           else updateQuantity(cid, q - 1);
                         }
                       }}
-                      className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-gray-600 hover:text-red-500 transition-colors rounded-full hover:bg-red-50"
+                      className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-teal-700 hover:text-red-500 transition-colors rounded-full hover:bg-red-50"
                     >
-                      <Minus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                      <Minus className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                     </button>
-                    <span className="text-sm sm:text-base font-bold text-gray-900 min-w-[20px] text-center">{getItemQuantity(product.id)}</span>
+                    <span className="text-xs sm:text-sm font-bold text-teal-800 min-w-[16px] text-center">{getItemQuantity(product.id)}</span>
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         addToCart(product);
                       }}
-                      className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-gray-600 hover:text-teal-600 transition-colors rounded-full hover:bg-teal-50"
+                      className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-teal-700 hover:text-teal-900 transition-colors rounded-full hover:bg-teal-100"
                     >
-                      <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                      <Plus className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                     </button>
                   </div>
                 ) : (
                   <button
                     onClick={(e) => handleAddToCart(e, product)}
-                    className="w-full flex items-center justify-center gap-1.5 bg-gray-900 text-white rounded-full h-9 sm:h-10 text-xs sm:text-sm font-medium hover:bg-gray-800 transition-all active:scale-[0.97]"
+                    className="w-full flex items-center justify-center gap-1.5 bg-teal-600 text-white rounded-full h-8 sm:h-9 text-[11px] sm:text-xs font-medium hover:bg-teal-700 transition-all active:scale-[0.97]"
                   >
-                    <Plus className="w-3.5 h-3.5" />
+                    <Plus className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                     <span>Add</span>
                   </button>
                 )}
