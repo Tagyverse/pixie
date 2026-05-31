@@ -127,9 +127,9 @@ export default function Navigation({ currentPage, onNavigate, onLoginClick, onCa
   }, [searchQuery, products]);
 
   return (
-    <nav className="w-full" style={{ backgroundColor: navStyle.background }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-center py-3 sm:py-4">
+    <nav className="w-full bg-white">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-center py-2.5 sm:py-3">
           <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap justify-center">
             {/* Home - Active style */}
             <NavPill
@@ -341,36 +341,34 @@ function NavPill({ active, onClick, icon, label, navStyle, badge }: NavPillProps
     <button
       onClick={onClick}
       className={`
-        relative inline-flex items-center gap-2 px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full
-        text-xs sm:text-sm font-semibold transition-all duration-200
+        relative inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full
+        text-[11px] sm:text-xs font-medium tracking-wide transition-all duration-300
         ${active
-          ? 'shadow-md'
-          : 'border border-[#C8D4C8] hover:border-[#6B8F6B] hover:shadow-sm'
+          ? 'shadow-sm'
+          : 'hover:shadow-sm'
         }
       `}
       style={{
-        backgroundColor: active ? navStyle.activeTab : navStyle.inactiveButton,
-        color: active ? '#FFFFFF' : navStyle.text,
+        backgroundColor: active ? '#2D4A3A' : '#FFFFFF',
+        color: active ? '#FFFFFF' : '#3D4A3D',
+        border: active ? '1.5px solid #7BAF7B' : '1.5px solid #7BAF7B',
       }}
     >
       <span
-        className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center flex-shrink-0"
+        className="w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center flex-shrink-0"
         style={{
-          backgroundColor: active ? '#5C8A5C' : '#FFFFFF',
-          border: active ? '1.5px solid #7BAF7B' : '1.5px solid #C8D4C8',
-          color: active ? '#FFFFFF' : '#4A6B4A',
+          backgroundColor: active ? 'rgba(123, 175, 123, 0.25)' : '#F0F5F0',
+          border: active ? '1px solid #7BAF7B' : '1px solid #C8D4C8',
+          color: active ? '#FFFFFF' : '#2D4A3A',
         }}
       >
         {icon}
       </span>
       <span className="whitespace-nowrap">{label}</span>
-      {active && (
-        <span className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-5 h-[2px] rounded-full bg-[#7BAF7B]" />
-      )}
 
       {badge !== undefined && (
         <span
-          className="absolute -top-1 -right-1 w-4.5 h-4.5 text-white text-[9px] font-bold rounded-full flex items-center justify-center border-2 border-white"
+          className="absolute -top-1.5 -right-1.5 w-4 h-4 text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-white shadow-sm"
           style={{ backgroundColor: '#C4532A' }}
         >
           {badge}
