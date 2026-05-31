@@ -58,28 +58,25 @@ export default function FilterBottomSheet({
                 <span className="w-1 h-6 bg-gradient-to-b from-teal-500 to-mint-500 rounded-full"></span>
                 Categories
               </h3>
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 <button
                   onClick={() => {
                     onCategorySelect(null);
                     onClose();
                   }}
-                  className={`block w-full text-left px-4 py-2 text-sm font-medium transition-all duration-300 ${
+                  className={`block w-full text-left px-4 py-2 text-xs font-medium tracking-wide uppercase transition-all duration-300 rounded-full ${
                     selectedCategory === null
-                      ? 'text-white shadow-lg shadow-teal-500/25'
-                      : 'text-gray-700 hover:bg-teal-50/60'
+                      ? 'bg-gray-900 text-white'
+                      : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100/80'
                   }`}
                   style={{
-                    borderRadius: '50px',
-                    border: selectedCategory === null ? 'none' : '1.5px solid #e5e7eb',
-                    background: selectedCategory === null
-                      ? 'linear-gradient(135deg, #0d9488, #14b8a6, #2dd4bf)'
-                      : undefined,
+                    border: selectedCategory === null ? '1px solid #111827' : '1px solid transparent',
+                    letterSpacing: '0.05em',
                   }}
                 >
-                  <span className="flex items-center gap-2">
-                    {selectedCategory === null && <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />}
-                    All Products
+                  <span className="flex items-center gap-1.5">
+                    {selectedCategory === null && <span className="w-1 h-1 rounded-full bg-teal-400" />}
+                    All
                   </span>
                 </button>
                 {categories.map((category) => (
@@ -89,21 +86,18 @@ export default function FilterBottomSheet({
                       onCategorySelect(category.id);
                       onClose();
                     }}
-                    className={`block w-full text-left px-4 py-2 text-sm font-medium transition-all duration-300 ${
+                    className={`block w-full text-left px-4 py-2 text-xs font-medium tracking-wide uppercase transition-all duration-300 rounded-full ${
                       selectedCategory === category.id
-                        ? 'text-white shadow-lg shadow-teal-500/25'
-                        : 'text-gray-700 hover:bg-teal-50/60'
+                        ? 'bg-gray-900 text-white'
+                        : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100/80'
                     }`}
                     style={{
-                      borderRadius: '50px',
-                      border: selectedCategory === category.id ? 'none' : '1.5px solid #e5e7eb',
-                      background: selectedCategory === category.id
-                        ? 'linear-gradient(135deg, #0d9488, #14b8a6, #2dd4bf)'
-                        : undefined,
+                      border: selectedCategory === category.id ? '1px solid #111827' : '1px solid transparent',
+                      letterSpacing: '0.05em',
                     }}
                   >
-                    <span className="flex items-center gap-2">
-                      {selectedCategory === category.id && <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />}
+                    <span className="flex items-center gap-1.5">
+                      {selectedCategory === category.id && <span className="w-1 h-1 rounded-full bg-teal-400" />}
                       {category.name}
                     </span>
                   </button>

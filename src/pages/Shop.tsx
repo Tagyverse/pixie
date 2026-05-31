@@ -243,52 +243,40 @@ export default function Shop({ onCartClick }: ShopProps) {
                   <Filter className="w-5 h-5 text-teal-600" />
                   Categories
                 </h3>
-                <div className="flex flex-wrap lg:flex-col gap-2">
+                <div className="flex flex-wrap lg:flex-col gap-1.5">
                   <button
                     onClick={() => setSelectedCategory(null)}
-                    className={`group relative px-3 py-1.5 text-xs font-semibold transition-all duration-300 overflow-hidden ${
+                    className={`group relative px-3.5 py-1.5 text-xs font-medium tracking-wide uppercase transition-all duration-300 rounded-full ${
                       selectedCategory === null
-                        ? 'text-white shadow-lg shadow-teal-500/25'
-                        : 'text-gray-600 hover:text-teal-700 bg-gray-50 hover:bg-teal-50/60'
+                        ? 'bg-gray-900 text-white'
+                        : 'bg-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-100/80'
                     }`}
                     style={{
-                      borderRadius: '50px',
-                      border: selectedCategory === null ? 'none' : '1.5px solid #e5e7eb',
-                      background: selectedCategory === null
-                        ? 'linear-gradient(135deg, #0d9488, #14b8a6, #2dd4bf)'
-                        : undefined,
+                      border: selectedCategory === null ? '1px solid #111827' : '1px solid transparent',
+                      letterSpacing: '0.05em',
                     }}
                   >
-                    {selectedCategory === null && (
-                      <span className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    )}
-                    <span className="relative flex items-center gap-2">
-                      {selectedCategory === null && <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />}
-                      All Products
+                    <span className="relative flex items-center gap-1.5">
+                      {selectedCategory === null && <span className="w-1 h-1 rounded-full bg-teal-400" />}
+                      All
                     </span>
                   </button>
                   {categories.map((category) => (
                     <button
                       key={category.id}
                       onClick={() => setSelectedCategory(category.id)}
-                      className={`group relative px-3 py-1.5 text-xs font-semibold transition-all duration-300 overflow-hidden ${
+                      className={`group relative px-3.5 py-1.5 text-xs font-medium tracking-wide uppercase transition-all duration-300 rounded-full ${
                         selectedCategory === category.id
-                          ? 'text-white shadow-lg shadow-teal-500/25'
-                          : 'text-gray-600 hover:text-teal-700 bg-gray-50 hover:bg-teal-50/60'
+                          ? 'bg-gray-900 text-white'
+                          : 'bg-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-100/80'
                       }`}
                       style={{
-                        borderRadius: '50px',
-                        border: selectedCategory === category.id ? 'none' : '1.5px solid #e5e7eb',
-                        background: selectedCategory === category.id
-                          ? 'linear-gradient(135deg, #0d9488, #14b8a6, #2dd4bf)'
-                          : undefined,
+                        border: selectedCategory === category.id ? '1px solid #111827' : '1px solid transparent',
+                        letterSpacing: '0.05em',
                       }}
                     >
-                      {selectedCategory === category.id && (
-                        <span className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      )}
-                      <span className="relative flex items-center gap-2">
-                        {selectedCategory === category.id && <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />}
+                      <span className="relative flex items-center gap-1.5">
+                        {selectedCategory === category.id && <span className="w-1 h-1 rounded-full bg-teal-400" />}
                         {category.name}
                       </span>
                     </button>
