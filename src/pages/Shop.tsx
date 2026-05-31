@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Filter, SlidersHorizontal, ShoppingCart, Heart, Star, X, MessageCircle, Shield } from 'lucide-react';
+import { Filter, SlidersHorizontal, ShoppingCart, Heart, Star, X, MessageCircle, Shield, Plus, Minus } from 'lucide-react';
 import { db } from '../lib/firebase';
 import { ref, get } from 'firebase/database';
 import { useCart } from '../contexts/CartContext';
@@ -25,7 +25,7 @@ interface ShopProps {
 }
 
 export default function Shop({ onCartClick }: ShopProps) {
-  const { addToCart, isInCart, taxSettings } = useCart();
+  const { addToCart, isInCart, taxSettings, getItemQuantity, getCartItemId, updateQuantity } = useCart();
   const { toggleFavorite, isFavorite } = useFavorites();
   const { design } = useCardDesign('shop_page');
   const cardStyles = getCardStyles(design);
@@ -309,12 +309,12 @@ export default function Shop({ onCartClick }: ShopProps) {
             </div>
 
             {loading ? (
-              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+              <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 lg:gap-6">
                 {[1, 2, 3, 4, 5, 6].map((i) => (
                   <div key={i} className="animate-pulse">
-                    <div className="aspect-square bg-gray-100 rounded-2xl mb-4"></div>
-                    <div className="h-4 bg-gray-100 rounded w-3/4 mb-2"></div>
-                    <div className="h-4 bg-gray-100 rounded w-1/2"></div>
+                    <div className="aspect-square bg-gray-100 rounded-2xl mb-3"></div>
+                    <div className="h-3 bg-gray-100 rounded w-3/4 mb-2"></div>
+                    <div className="h-3 bg-gray-100 rounded w-1/2"></div>
                   </div>
                 ))}
               </div>
@@ -327,76 +327,124 @@ export default function Shop({ onCartClick }: ShopProps) {
                 <p className="text-gray-500">Try adjusting your filters or category selection</p>
               </div>
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                {products.map((product) => (
-                  <div
-                    key={product.id}
-                    className={`group bg-white overflow-hidden transition-all duration-300 ${cardStyles.container || 'border-2 border-gray-200 rounded-2xl'}`}
-                    style={{ ...cardStyles.style, transform: 'translateY(0)' }}
-                    onMouseEnter={(e) => {
-                      if (cardStyles.hoverTransform) {
-                        e.currentTarget.style.transform = cardStyles.hoverTransform;
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = 'translateY(0)';
-                    }}
-                  >
-                    <div 
-                      className="aspect-square overflow-hidden relative cursor-pointer" 
-                      style={cardStyles.imageStyle}
-                      onClick={() => {
-                        setSelectedProduct(product);
-                        setShowProductDetails(true);
+              <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 lg:gap-6">
+                {products.map((product) => {
+                  const inCart = isInCart(product.id);
+                  const qty = getItemQuantity(product.id);
+                  const cartItemId = getCartItemId(product.id);
+                  const discount = product.compare_at_price
+                    ? Math.round(((product.compare_at_price - product.price) / product.compare_at_price) * 100)
+                    : 0;
+
+                  return (
+                    <div
+                      key={product.id}
+                      className={`group bg-white overflow-hidden transition-all duration-300 ${cardStyles.container || 'border border-gray-100 rounded-2xl'}`}
+                      style={{ ...cardStyles.style, transform: 'translateY(0)' }}
+                      onMouseEnter={(e) => {
+                        if (cardStyles.hoverTransform) {
+                          e.currentTarget.style.transform = cardStyles.hoverTransform;
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'translateY(0)';
                       }}
                     >
-                      <LazyImage
-                        src={product.image_url}
-                        alt={product.name}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                      />
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleFavorite(product.id);
-                        }}
-                        className="absolute top-2 right-2 p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md hover:scale-110 transition-all"
-                      >
-                        <Heart className={`w-4 h-4 ${isFavorite(product.id) ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
-                      </button>
-                      {!product.in_stock && (
-                        <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] flex items-center justify-center">
-                          <span className="bg-white text-gray-900 px-4 py-2 rounded-lg font-bold text-sm shadow-xl">Out of Stock</span>
-                        </div>
-                      )}
-                    </div>
-                    <div className="p-4">
-                      <h3 className="font-bold text-gray-900 mb-1 line-clamp-1 group-hover:text-teal-600 transition-colors cursor-pointer"
+                      <div
+                        className="aspect-square overflow-hidden relative cursor-pointer"
+                        style={cardStyles.imageStyle}
                         onClick={() => {
                           setSelectedProduct(product);
                           setShowProductDetails(true);
                         }}
                       >
-                        {product.name}
-                      </h3>
-                      <div className="flex items-center justify-between mt-2">
-                        <div className="flex flex-col">
-                          <span className="text-lg font-black text-gray-900">₹{product.price}</span>
+                        <LazyImage
+                          src={product.image_url}
+                          alt={product.name}
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                        {product.featured && (
+                          <span className="absolute top-2 left-2 bg-white/90 backdrop-blur-sm text-[10px] sm:text-xs font-semibold text-gray-700 px-2 py-0.5 rounded-md shadow-sm">
+                            Featured
+                          </span>
+                        )}
+                        {discount > 0 && (
+                          <span className="absolute top-2 right-10 sm:right-11 bg-red-500 text-white text-[10px] sm:text-xs font-bold px-1.5 py-0.5 rounded-md">
+                            -{discount}%
+                          </span>
+                        )}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleFavorite(product.id);
+                          }}
+                          className="absolute top-2 right-2 p-1.5 sm:p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-sm hover:scale-110 transition-all"
+                        >
+                          <Heart className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isFavorite(product.id) ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
+                        </button>
+                        {!product.in_stock && (
+                          <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] flex items-center justify-center">
+                            <span className="bg-white text-gray-900 px-3 py-1.5 rounded-lg font-bold text-xs sm:text-sm shadow-xl">Out of Stock</span>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="p-2.5 sm:p-3.5">
+                        <h3
+                          className="font-semibold text-gray-900 text-xs sm:text-sm leading-tight line-clamp-2 mb-1.5 cursor-pointer hover:text-teal-600 transition-colors"
+                          onClick={() => {
+                            setSelectedProduct(product);
+                            setShowProductDetails(true);
+                          }}
+                        >
+                          {product.name}
+                        </h3>
+
+                        <div className="flex items-baseline gap-1.5 mb-2">
+                          <span className="text-sm sm:text-base font-bold text-gray-900">₹{product.price}</span>
                           {product.compare_at_price && (
-                            <span className="text-xs text-gray-400 line-through">₹{product.compare_at_price}</span>
+                            <span className="text-[10px] sm:text-xs text-gray-400 line-through">₹{product.compare_at_price}</span>
                           )}
                         </div>
-                        <button
-                          onClick={() => addToCart(product)}
-                          disabled={!product.in_stock}
-                          className="p-2.5 bg-teal-500 text-white rounded-xl hover:bg-teal-600 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
-                        >
-                          <ShoppingCart className="w-5 h-5" />
-                        </button>
+
+                        {inCart && qty > 0 ? (
+                          <div className="flex items-center justify-between bg-gray-50 rounded-full border border-gray-200 h-9 sm:h-10">
+                            <button
+                              onClick={() => {
+                                if (cartItemId) {
+                                  if (qty <= 1) {
+                                    updateQuantity(cartItemId, 0);
+                                  } else {
+                                    updateQuantity(cartItemId, qty - 1);
+                                  }
+                                }
+                              }}
+                              className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-gray-600 hover:text-red-500 transition-colors rounded-full hover:bg-red-50"
+                            >
+                              <Minus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                            </button>
+                            <span className="text-sm sm:text-base font-bold text-gray-900 min-w-[20px] text-center">{qty}</span>
+                            <button
+                              onClick={() => addToCart(product)}
+                              className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-gray-600 hover:text-teal-600 transition-colors rounded-full hover:bg-teal-50"
+                            >
+                              <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => addToCart(product)}
+                            disabled={!product.in_stock}
+                            className="w-full flex items-center justify-center gap-1.5 bg-gray-900 text-white rounded-full h-9 sm:h-10 text-xs sm:text-sm font-medium hover:bg-gray-800 transition-all active:scale-[0.97] disabled:opacity-40 disabled:cursor-not-allowed"
+                          >
+                            <Plus className="w-3.5 h-3.5" />
+                            <span>Add</span>
+                          </button>
+                        )}
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </main>

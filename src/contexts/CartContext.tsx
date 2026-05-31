@@ -33,6 +33,8 @@ interface CartContextType {
   itemCount: number;
   loading: boolean;
   isInCart: (productId: string) => boolean;
+  getItemQuantity: (productId: string) => number;
+  getCartItemId: (productId: string) => string | null;
   getItemPrice: (item: CartItem) => number;
   taxSettings: TaxSettings | null;
 }
@@ -217,6 +219,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
     return items.some(item => item.id === productId);
   };
 
+  const getItemQuantity = (productId: string) => {
+    return items.filter(item => item.id === productId).reduce((sum, item) => sum + item.quantity, 0);
+  };
+
+  const getCartItemId = (productId: string) => {
+    const item = items.find(item => item.id === productId);
+    return item?.cart_item_id || null;
+  };
+
   const value = {
     items,
     addToCart,
@@ -231,6 +242,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
     itemCount,
     loading,
     isInCart,
+    getItemQuantity,
+    getCartItemId,
     getItemPrice,
     taxSettings
   };
