@@ -152,10 +152,13 @@ export default function TopBanner() {
               );
             })}
           </div>
-          {/* Header image - sits close above the chips */}
-          <img
-            src="/image copy.png"
-            alt="Header"
+          {/* Header logo animation - sits close above the chips */}
+          <video
+            src="/logoanim.webm"
+            autoPlay
+            muted
+            loop
+            playsInline
             className="relative z-10 w-40 sm:w-52 md:w-60 object-contain mt-1 -mb-8 sm:-mb-10 pointer-events-none"
           />
         </div>
