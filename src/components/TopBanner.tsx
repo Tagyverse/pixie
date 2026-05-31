@@ -152,11 +152,11 @@ export default function TopBanner() {
               );
             })}
           </div>
-          {/* Header image */}
+          {/* Header image - sits close above the chips */}
           <img
             src="/image copy.png"
             alt="Header"
-            className="relative z-10 w-40 sm:w-52 md:w-60 object-contain mt-2"
+            className="relative z-10 w-40 sm:w-52 md:w-60 object-contain mt-1 -mb-4 sm:-mb-5"
           />
         </div>
       )}
