@@ -16,13 +16,23 @@ export function useScrollReveal() {
           }
         });
       },
-      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+      { threshold: 0.08, rootMargin: '0px 0px -30px 0px' }
     );
 
-    const elements = el.querySelectorAll('.scroll-reveal');
-    elements.forEach((element) => observer.observe(element));
+    const observe = () => {
+      const elements = el.querySelectorAll('.scroll-reveal:not(.revealed)');
+      elements.forEach((element) => observer.observe(element));
+    };
 
-    return () => observer.disconnect();
+    observe();
+
+    const mutationObserver = new MutationObserver(() => observe());
+    mutationObserver.observe(el, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+      mutationObserver.disconnect();
+    };
   }, []);
 
   return ref;
