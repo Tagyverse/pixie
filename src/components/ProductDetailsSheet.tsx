@@ -79,7 +79,7 @@ export default function ProductDetailsSheet({ product, isOpen, onClose, onCartCl
     if (product) {
       setCurrentImageIndex(0);
       setQuantity(1);
-      setSelectedSize(product.default_size || '');
+      setSelectedSize(product.default_size || (product.sizes && product.sizes[0]) || '');
       setSelectedColor(product.default_color || '');
       setFullScreenImage(null);
       setJustAdded(false);

@@ -1,8 +1,9 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { ChevronLeft, ChevronRight, Heart, Plus, Minus } from 'lucide-react';
 import { Product, Category, HomepageSection } from '../types';
 import { usePublishedData } from '../contexts/PublishedDataContext';
 import LazyImage from './LazyImage';
+import Confetti from './Confetti';
 import { useCart } from '../contexts/CartContext';
 import { useFavorites } from '../contexts/FavoritesContext';
 import { useCardDesign, getCardStyles } from '../hooks/useCardDesign';
@@ -18,6 +19,9 @@ export default function DynamicSection({ section, onProductClick, onCategoryClic
   const [items, setItems] = useState<(Product | Category)[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [selectedSizes, setSelectedSizes] = useState<Record<string, string>>({});
+  const [confettiActive, setConfettiActive] = useState(false);
+  const [confettiOrigin, setConfettiOrigin] = useState({ x: 50, y: 50 });
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const { addToCart, isInCart, getItemQuantity, getCartItemId, updateQuantity } = useCart();
   const { favorites, toggleFavorite } = useFavorites();
@@ -83,13 +87,17 @@ export default function DynamicSection({ section, onProductClick, onCategoryClic
 
   const handleAddToCart = (e: React.MouseEvent, product: Product) => {
     e.stopPropagation();
-    addToCart({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      image_url: product.image_url,
-      quantity: 1
-    });
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    const x = ((rect.left + rect.width / 2) / window.innerWidth) * 100;
+    const y = ((rect.top + rect.height / 2) / window.innerHeight) * 100;
+    setConfettiOrigin({ x, y });
+    setConfettiActive(true);
+    const activeSize = selectedSizes[product.id] || (product.sizes && product.sizes[0]) || '';
+    if (activeSize && product.size_pricing?.[activeSize]) {
+      addToCart({ ...product, price: product.size_pricing[activeSize].price, default_size: activeSize });
+    } else {
+      addToCart(product);
+    }
   };
 
   const handleToggleFavorite = (e: React.MouseEvent, productId: string) => {
@@ -131,18 +139,7 @@ export default function DynamicSection({ section, onProductClick, onCategoryClic
       >
         <div
           className={`relative bg-white overflow-hidden ${cardStyles.container || 'rounded-2xl border-2 border-gray-100'}`}
-          style={{
-            ...cardStyles.style,
-            transform: 'translateY(0)'
-          }}
-          onMouseEnter={(e) => {
-            if (cardStyles.hoverTransform) {
-              e.currentTarget.style.transform = cardStyles.hoverTransform;
-            }
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'translateY(0)';
-          }}
+          style={cardStyles.style}
         >
           <div className="aspect-square relative overflow-hidden" style={cardStyles.imageStyle}>
             <LazyImage
@@ -153,32 +150,66 @@ export default function DynamicSection({ section, onProductClick, onCategoryClic
             {isProduct && product && (
               <>
                 {product.compare_at_price && product.compare_at_price > product.price && (
-                  <div className="absolute top-3 left-3 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                  <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-0.5 rounded text-[9px] sm:text-[11px] font-bold">
                     {Math.round(((product.compare_at_price - product.price) / product.compare_at_price) * 100)}% OFF
                   </div>
                 )}
                 <button
                   onClick={(e) => handleToggleFavorite(e, product.id)}
-                  className={`absolute top-3 right-3 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
+                  className={`absolute top-2 right-2 w-8 h-8 rounded-full flex items-center justify-center ${
                     favorites.includes(product.id)
-                      ? 'bg-red-500 text-white scale-110'
-                      : 'bg-white/90 text-gray-600 hover:bg-red-500 hover:text-white'
+                      ? 'bg-red-500 text-white'
+                      : 'bg-white/90 text-gray-600'
                   }`}
                 >
-                  <Heart className={`w-5 h-5 ${favorites.includes(product.id) ? 'fill-current' : ''}`} />
+                  <Heart className={`w-4 h-4 ${favorites.includes(product.id) ? 'fill-current' : ''}`} />
                 </button>
+                {product.sizes && product.sizes.length > 0 && (
+                  <div
+                    className="absolute bottom-0 left-0 right-0 bg-black/40 backdrop-blur-sm px-1.5 py-1.5"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <div className="flex gap-1 overflow-x-auto no-scrollbar">
+                      {product.sizes.map((size) => (
+                        <button
+                          key={size}
+                          onClick={() => setSelectedSizes(prev => ({ ...prev, [product.id]: size }))}
+                          className={`flex-shrink-0 px-2 py-0.5 rounded text-[9px] sm:text-[10px] font-medium transition-colors ${
+                            (selectedSizes[product.id] || product.sizes![0]) === size
+                              ? 'bg-white text-gray-900'
+                              : 'bg-white/30 text-white'
+                          }`}
+                        >
+                          {size}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </>
             )}
           </div>
-          <div className="p-4">
-            <h3 className="font-bold text-gray-900 mb-1 line-clamp-2">{item.name}</h3>
+          <div className="p-3">
+            <h3 className="font-bold text-gray-900 mb-1 text-xs sm:text-sm line-clamp-2">{item.name}</h3>
             {isProduct && product && (
               <>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-xl font-bold text-teal-600">₹{product.price}</span>
-                  {product.compare_at_price && product.compare_at_price > product.price && (
-                    <span className="text-sm text-gray-400 line-through">₹{product.compare_at_price}</span>
-                  )}
+                <div className="flex items-center gap-1.5 mb-2">
+                  {(() => {
+                    const activeSize = selectedSizes[product.id] || (product.sizes && product.sizes[0]) || '';
+                    const sizePrice = activeSize && product.size_pricing?.[activeSize];
+                    return (
+                      <>
+                        <span className="text-sm sm:text-base font-bold text-gray-900">
+                          ₹{sizePrice ? sizePrice.price : product.price}
+                        </span>
+                        {(sizePrice?.compare_at_price || (product.compare_at_price && product.compare_at_price > product.price)) && (
+                          <span className="text-[10px] sm:text-xs text-gray-400 line-through">
+                            ₹{sizePrice?.compare_at_price || product.compare_at_price}
+                          </span>
+                        )}
+                      </>
+                    );
+                  })()}
                 </div>
                 {isInCart(product.id) && getItemQuantity(product.id) > 0 ? (
                   <div
@@ -195,7 +226,7 @@ export default function DynamicSection({ section, onProductClick, onCategoryClic
                           else updateQuantity(cid, q - 1);
                         }
                       }}
-                      className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-teal-700 hover:text-red-500 transition-colors rounded-full hover:bg-red-50"
+                      className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-teal-700 hover:text-red-500 transition-colors rounded-full"
                     >
                       <Minus className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                     </button>
@@ -203,9 +234,9 @@ export default function DynamicSection({ section, onProductClick, onCategoryClic
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        addToCart(product);
+                        handleAddToCart(e, product);
                       }}
-                      className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-teal-700 hover:text-teal-900 transition-colors rounded-full hover:bg-teal-100"
+                      className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-teal-700 hover:text-teal-900 transition-colors rounded-full"
                     >
                       <Plus className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                     </button>
@@ -213,7 +244,7 @@ export default function DynamicSection({ section, onProductClick, onCategoryClic
                 ) : (
                   <button
                     onClick={(e) => handleAddToCart(e, product)}
-                    className="w-full flex items-center justify-center gap-1.5 bg-teal-600 text-white rounded-full h-8 sm:h-9 text-[11px] sm:text-xs font-medium hover:bg-teal-700 transition-all active:scale-[0.97]"
+                    className="w-full flex items-center justify-center gap-1.5 bg-teal-600 text-white rounded-full h-8 sm:h-9 text-[11px] sm:text-xs font-medium hover:bg-teal-700 transition-colors active:scale-[0.97]"
                   >
                     <Plus className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                     <span>Add</span>
@@ -325,6 +356,13 @@ export default function DynamicSection({ section, onProductClick, onCategoryClic
       {section.display_type === 'swipable' && renderHorizontalScroll()}
       {section.display_type === 'vertical' && renderVertical()}
       {section.display_type === 'grid' && renderGrid()}
+
+      <Confetti
+        isActive={confettiActive}
+        originX={confettiOrigin.x}
+        originY={confettiOrigin.y}
+        onComplete={() => setConfettiActive(false)}
+      />
     </section>
   );
 }

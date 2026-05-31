@@ -196,9 +196,9 @@ export default function Shop({ onCartClick }: ShopProps) {
     const y = ((rect.top + rect.height / 2) / window.innerHeight) * 100;
     setConfettiOrigin({ x, y });
     setConfettiActive(true);
-    const selectedSize = selectedSizes[product.id];
-    if (selectedSize && product.size_pricing?.[selectedSize]) {
-      addToCart({ ...product, price: product.size_pricing[selectedSize].price, default_size: selectedSize });
+    const activeSize = selectedSizes[product.id] || (product.sizes && product.sizes[0]) || '';
+    if (activeSize && product.size_pricing?.[activeSize]) {
+      addToCart({ ...product, price: product.size_pricing[activeSize].price, default_size: activeSize });
     } else {
       addToCart(product);
     }
@@ -396,6 +396,28 @@ export default function Shop({ onCartClick }: ShopProps) {
                         >
                           <Heart className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isFavorite(product.id) ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
                         </button>
+                        {product.sizes && product.sizes.length > 0 && (
+                          <div
+                            className="absolute bottom-0 left-0 right-0 bg-black/40 backdrop-blur-sm px-1.5 py-1.5"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <div className="flex gap-1 overflow-x-auto no-scrollbar">
+                              {product.sizes.map((size) => (
+                                <button
+                                  key={size}
+                                  onClick={() => setSelectedSizes(prev => ({ ...prev, [product.id]: size }))}
+                                  className={`flex-shrink-0 px-2 py-0.5 rounded text-[9px] sm:text-[10px] font-medium transition-colors ${
+                                    (selectedSizes[product.id] || product.sizes![0]) === size
+                                      ? 'bg-white text-gray-900'
+                                      : 'bg-white/30 text-white'
+                                  }`}
+                                >
+                                  {size}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                         {!product.in_stock && (
                           <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] flex items-center justify-center">
                             <span className="bg-white text-gray-900 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg font-bold text-[10px] sm:text-xs">Out of Stock</span>
@@ -415,33 +437,23 @@ export default function Shop({ onCartClick }: ShopProps) {
                         </h3>
 
                         <div className="flex items-baseline gap-1.5 mb-2">
-                          <span className="text-sm sm:text-base font-bold text-gray-900">
-                            ₹{selectedSizes[product.id] && product.size_pricing?.[selectedSizes[product.id]]
-                              ? product.size_pricing[selectedSizes[product.id]].price
-                              : product.price}
-                          </span>
-                          {product.compare_at_price && (
-                            <span className="text-[10px] sm:text-xs text-gray-400 line-through">₹{product.compare_at_price}</span>
-                          )}
+                          {(() => {
+                            const activeSize = selectedSizes[product.id] || (product.sizes && product.sizes[0]) || '';
+                            const sizePrice = activeSize && product.size_pricing?.[activeSize];
+                            return (
+                              <>
+                                <span className="text-sm sm:text-base font-bold text-gray-900">
+                                  ₹{sizePrice ? sizePrice.price : product.price}
+                                </span>
+                                {(sizePrice?.compare_at_price || product.compare_at_price) && (
+                                  <span className="text-[10px] sm:text-xs text-gray-400 line-through">
+                                    ₹{sizePrice?.compare_at_price || product.compare_at_price}
+                                  </span>
+                                )}
+                              </>
+                            );
+                          })()}
                         </div>
-
-                        {product.sizes && product.sizes.length > 0 && (
-                          <div className="flex flex-wrap gap-1 mb-2">
-                            {product.sizes.map((size) => (
-                              <button
-                                key={size}
-                                onClick={() => setSelectedSizes(prev => ({ ...prev, [product.id]: prev[product.id] === size ? '' : size }))}
-                                className={`px-2 py-0.5 rounded text-[10px] sm:text-xs font-medium border transition-colors ${
-                                  selectedSizes[product.id] === size
-                                    ? 'bg-gray-900 text-white border-gray-900'
-                                    : 'bg-white text-gray-600 border-gray-200'
-                                }`}
-                              >
-                                {size}
-                              </button>
-                            ))}
-                          </div>
-                        )}
 
                         {inCart && qty > 0 ? (
                           <div className="flex items-center justify-between bg-teal-50 rounded-full border border-teal-200 h-9 sm:h-10">

@@ -27,6 +27,7 @@ export default function FeaturedCategories({ onNavigate, onAddToCart, onCartClic
   const [loading, setLoading] = useState(true);
   const [confettiActive, setConfettiActive] = useState(false);
   const [confettiOrigin, setConfettiOrigin] = useState({ x: 50, y: 50 });
+  const [selectedSizes, setSelectedSizes] = useState<Record<string, string>>({});
   const { isInCart, addToCart, getItemQuantity, getCartItemId, updateQuantity } = useCart();
   const { toggleFavorite, isFavorite } = useFavorites();
   const { design } = useCardDesign('shop_by_category');
@@ -121,7 +122,7 @@ export default function FeaturedCategories({ onNavigate, onAddToCart, onCartClic
                           e.stopPropagation();
                           toggleFavorite(product);
                         }}
-                        className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-white/90 p-1.5 rounded-full hover:bg-white transition-all"
+                        className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-white/90 p-1.5 rounded-full"
                       >
                         <Heart
                           className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${
@@ -129,6 +130,28 @@ export default function FeaturedCategories({ onNavigate, onAddToCart, onCartClic
                           }`}
                         />
                       </button>
+                      {product.sizes && product.sizes.length > 0 && (
+                        <div
+                          className="absolute bottom-0 left-0 right-0 bg-black/40 backdrop-blur-sm px-1.5 py-1.5"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <div className="flex gap-1 overflow-x-auto no-scrollbar">
+                            {product.sizes.map((size) => (
+                              <button
+                                key={size}
+                                onClick={() => setSelectedSizes(prev => ({ ...prev, [product.id]: size }))}
+                                className={`flex-shrink-0 px-2 py-0.5 rounded text-[9px] sm:text-[10px] font-medium transition-colors ${
+                                  (selectedSizes[product.id] || product.sizes![0]) === size
+                                    ? 'bg-white text-gray-900'
+                                    : 'bg-white/30 text-white'
+                                }`}
+                              >
+                                {size}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
 
                     <div className="p-2.5 sm:p-3">
@@ -137,10 +160,22 @@ export default function FeaturedCategories({ onNavigate, onAddToCart, onCartClic
                       </h3>
 
                       <div className="flex items-baseline gap-1.5 mb-2.5">
-                        <span className="text-sm sm:text-base font-bold text-gray-900">₹{product.price}</span>
-                        {product.compare_at_price && product.compare_at_price > product.price && (
-                          <span className="text-[10px] sm:text-xs text-gray-400 line-through">₹{product.compare_at_price}</span>
-                        )}
+                        {(() => {
+                          const activeSize = selectedSizes[product.id] || (product.sizes && product.sizes[0]) || '';
+                          const sizePrice = activeSize && product.size_pricing?.[activeSize];
+                          return (
+                            <>
+                              <span className="text-sm sm:text-base font-bold text-gray-900">
+                                ₹{sizePrice ? sizePrice.price : product.price}
+                              </span>
+                              {(sizePrice?.compare_at_price || (product.compare_at_price && product.compare_at_price > product.price)) && (
+                                <span className="text-[10px] sm:text-xs text-gray-400 line-through">
+                                  ₹{sizePrice?.compare_at_price || product.compare_at_price}
+                                </span>
+                              )}
+                            </>
+                          );
+                        })()}
                       </div>
 
                       <div>
