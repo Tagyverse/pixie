@@ -30,10 +30,10 @@ interface ButtonLabels {
 const PRESET_THEMES: NavTheme[] = [
   {
     name: 'Default',
-    background: '#ffffff',
-    text: '#111827',
-    activeTab: '#14b8a6',
-    inactiveButton: '#f3f4f6',
+    background: '#F0F5F0',
+    text: '#3D4A3D',
+    activeTab: '#2D4A3A',
+    inactiveButton: '#F0F5F0',
     borderRadius: 'full',
     buttonSize: 'md'
   },
@@ -65,11 +65,11 @@ const PRESET_THEMES: NavTheme[] = [
     buttonSize: 'md'
   },
   {
-    name: 'Mint Fresh',
+    name: 'Forest Green',
     background: '#f0fdf4',
     text: '#14532d',
-    activeTab: '#10b981',
-    inactiveButton: '#d1fae5',
+    activeTab: '#166534',
+    inactiveButton: '#dcfce7',
     borderRadius: 'full',
     buttonSize: 'md'
   }
@@ -94,10 +94,10 @@ const BORDER_RADIUS_OPTIONS = [
 
 export default function NavigationCustomizer() {
   const { user } = useAuth();
-  const [navBgColor, setNavBgColor] = useState('#ffffff');
-  const [navTextColor, setNavTextColor] = useState('#111827');
-  const [activeTabColor, setActiveTabColor] = useState('#14b8a6');
-  const [inactiveButtonColor, setInactiveButtonColor] = useState('#f3f4f6');
+  const [navBgColor, setNavBgColor] = useState('#F0F5F0');
+  const [navTextColor, setNavTextColor] = useState('#3D4A3D');
+  const [activeTabColor, setActiveTabColor] = useState('#2D4A3A');
+  const [inactiveButtonColor, setInactiveButtonColor] = useState('#F0F5F0');
   const [borderRadius, setBorderRadius] = useState('full');
   const [buttonSize, setButtonSize] = useState('md');
   const [themeMode, setThemeMode] = useState<'default' | 'preset' | 'custom'>('default');
@@ -126,10 +126,10 @@ export default function NavigationCustomizer() {
       if (styleSnap.exists()) {
         const style = styleSnap.val();
         console.log('[NAV] Loaded navigation_settings:', style);
-        setNavBgColor(style.background || '#ffffff');
-        setNavTextColor(style.text || '#111827');
-        setActiveTabColor(style.activeTab || '#14b8a6');
-        setInactiveButtonColor(style.inactiveButton || '#f3f4f6');
+        setNavBgColor(style.background || '#F0F5F0');
+        setNavTextColor(style.text || '#3D4A3D');
+        setActiveTabColor(style.activeTab || '#2D4A3A');
+        setInactiveButtonColor(style.inactiveButton || '#F0F5F0');
         setBorderRadius(style.borderRadius || 'full');
         setButtonSize(style.buttonSize || 'md');
         setThemeMode(style.themeMode || 'default');

@@ -30,10 +30,10 @@ export default function Navigation({ currentPage, onNavigate, onLoginClick, onCa
   const isDevelopment = import.meta.env.DEV;
 
   const [navStyle, setNavStyle] = useState({
-    background: '#FDF6EE',
+    background: '#F0F5F0',
     text: '#3D4A3D',
     activeTab: '#2D4A3A',
-    inactiveButton: '#F5F0EA',
+    inactiveButton: '#F0F5F0',
     borderRadius: 'full',
     buttonSize: 'md',
     themeMode: 'default'
@@ -57,10 +57,10 @@ export default function Navigation({ currentPage, onNavigate, onLoginClick, onCa
     try {
       const style = publishedData.navigation_settings;
       setNavStyle({
-        background: style.background || '#FDF6EE',
-        text: style.text || '#5C4A2F',
-        activeTab: style.activeTab || '#3D3321',
-        inactiveButton: style.inactiveButton || '#F5EDE3',
+        background: style.background || '#F0F5F0',
+        text: style.text || '#3D4A3D',
+        activeTab: style.activeTab || '#2D4A3A',
+        inactiveButton: style.inactiveButton || '#F0F5F0',
         borderRadius: style.borderRadius || 'full',
         buttonSize: style.buttonSize || 'md',
         themeMode: style.themeMode || 'default'

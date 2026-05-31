@@ -86,7 +86,7 @@ export default function TopBanner() {
       <div
         className="py-2 overflow-hidden relative"
         style={{
-          backgroundColor: bannerContent.backgroundColor || '#8B7D3C',
+          backgroundColor: bannerContent.backgroundColor || '#2D4A3A',
           color: bannerContent.textColor || '#ffffff'
         }}
       >
@@ -125,8 +125,8 @@ export default function TopBanner() {
                   }}
                 >
                   {/* Thread/string */}
-                  <div className={`w-px ${stringHeight}`} style={{ background: 'linear-gradient(to bottom, #8B7D3C, #C4B590)' }}></div>
-                  <div className="w-1.5 h-1.5 rounded-full -mt-px mb-0.5" style={{ backgroundColor: '#C4B590' }}></div>
+                  <div className={`w-px ${stringHeight}`} style={{ background: 'linear-gradient(to bottom, #2D4A3A, #7BAF7B)' }}></div>
+                  <div className="w-1.5 h-1.5 rounded-full -mt-px mb-0.5" style={{ backgroundColor: '#7BAF7B' }}></div>
                   {/* Icon circle */}
                   <a
                     href={social.url}
@@ -135,7 +135,7 @@ export default function TopBanner() {
                     aria-label={social.platform}
                     className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border-2 flex items-center justify-center transition-all hover:scale-110 hover:shadow-md"
                     style={{
-                      borderColor: '#C4B590',
+                      borderColor: '#7BAF7B',
                       backgroundColor: '#FFFFFF',
                     }}
                   >
