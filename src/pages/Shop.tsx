@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Filter, SlidersHorizontal, ShoppingCart, Heart, Star, X, MessageCircle, Shield, Plus, Minus } from 'lucide-react';
 import { db } from '../lib/firebase';
 import { ref, get } from 'firebase/database';
 import { useCart } from '../contexts/CartContext';
 import { useFavorites } from '../contexts/FavoritesContext';
 import { useCardDesign, getCardStyles } from '../hooks/useCardDesign';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 import EnquiryModal from '../components/EnquiryModal';
 import ProductDetailsSheet from '../components/ProductDetailsSheet';
 import WhatsAppCustomization from '../components/WhatsAppCustomization';
@@ -29,6 +30,7 @@ export default function Shop({ onCartClick }: ShopProps) {
   const { toggleFavorite, isFavorite } = useFavorites();
   const { design } = useCardDesign('shop_page');
   const cardStyles = getCardStyles(design);
+  const scrollRef = useScrollReveal();
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -234,7 +236,7 @@ export default function Shop({ onCartClick }: ShopProps) {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" ref={scrollRef}>
         <div className="flex flex-col lg:flex-row gap-8">
           <aside className="lg:w-64 flex-shrink-0">
             <div className="sticky top-24 space-y-6">
@@ -246,26 +248,28 @@ export default function Shop({ onCartClick }: ShopProps) {
                 <div className="flex flex-wrap lg:flex-col gap-1.5">
                   <button
                     onClick={() => setSelectedCategory(null)}
-                    className={`group relative px-3.5 py-2 text-[11px] sm:text-xs font-medium tracking-wide transition-all duration-300 rounded-full ${
+                    className={`chip-animate group relative px-3.5 py-2 text-[11px] sm:text-xs font-medium tracking-wide transition-all duration-300 rounded-full ${
                       selectedCategory === null
-                        ? 'bg-[#2D4A3A] text-white ring-1 ring-[#7BAF7B]/40 shadow-sm'
+                        ? 'bg-[#2D4A3A] text-white ring-1 ring-[#7BAF7B]/40'
                         : 'bg-[#F0F5F0] text-[#3D4A3D] hover:bg-[#E5EDE5] border border-[#C8D4C8]'
                     }`}
+                    style={{ animationDelay: '0ms' }}
                   >
                     <span className="relative flex items-center gap-1.5">
                       {selectedCategory === null && <span className="w-1.5 h-1.5 rounded-full bg-[#7BAF7B] animate-[pulse_2s_ease-in-out_infinite]" />}
                       All
                     </span>
                   </button>
-                  {categories.map((category) => (
+                  {categories.map((category, index) => (
                     <button
                       key={category.id}
                       onClick={() => setSelectedCategory(category.id)}
-                      className={`group relative px-3.5 py-2 text-[11px] sm:text-xs font-medium tracking-wide transition-all duration-300 rounded-full ${
+                      className={`chip-animate group relative px-3.5 py-2 text-[11px] sm:text-xs font-medium tracking-wide transition-all duration-300 rounded-full ${
                         selectedCategory === category.id
-                          ? 'bg-[#2D4A3A] text-white ring-1 ring-[#7BAF7B]/40 shadow-sm'
+                          ? 'bg-[#2D4A3A] text-white ring-1 ring-[#7BAF7B]/40'
                           : 'bg-[#F0F5F0] text-[#3D4A3D] hover:bg-[#E5EDE5] border border-[#C8D4C8]'
                       }`}
+                      style={{ animationDelay: `${(index + 1) * 60}ms` }}
                     >
                       <span className="relative flex items-center gap-1.5">
                         {selectedCategory === category.id && <span className="w-1.5 h-1.5 rounded-full bg-[#7BAF7B] animate-[pulse_2s_ease-in-out_infinite]" />}
@@ -327,8 +331,8 @@ export default function Shop({ onCartClick }: ShopProps) {
                 <p className="text-gray-500">Try adjusting your filters or category selection</p>
               </div>
             ) : (
-              <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 lg:gap-6">
-                {products.map((product) => {
+              <div className="scroll-reveal grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 lg:gap-6">
+                {products.map((product, index) => {
                   const inCart = isInCart(product.id);
                   const qty = getItemQuantity(product.id);
                   const cartItemId = getCartItemId(product.id);
@@ -339,15 +343,15 @@ export default function Shop({ onCartClick }: ShopProps) {
                   return (
                     <div
                       key={product.id}
-                      className={`group bg-white overflow-hidden transition-all duration-300 ${cardStyles.container || 'border border-gray-100 rounded-2xl'}`}
-                      style={{ ...cardStyles.style, transform: 'translateY(0)' }}
+                      className={`card-stagger group bg-white overflow-hidden transition-all duration-300 ${cardStyles.container || 'border border-gray-100 rounded-2xl'}`}
+                      style={{ ...cardStyles.style, animationDelay: `${index * 80}ms` }}
                       onMouseEnter={(e) => {
                         if (cardStyles.hoverTransform) {
                           e.currentTarget.style.transform = cardStyles.hoverTransform;
                         }
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.transform = '';
                       }}
                     >
                       <div
@@ -364,7 +368,7 @@ export default function Shop({ onCartClick }: ShopProps) {
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                         {product.featured && (
-                          <span className="absolute top-2 left-2 bg-white/90 backdrop-blur-sm text-[10px] sm:text-xs font-semibold text-gray-700 px-2 py-0.5 rounded-md shadow-sm">
+                          <span className="absolute top-2 left-2 bg-white/90 backdrop-blur-sm text-[10px] sm:text-xs font-semibold text-gray-700 px-2 py-0.5 rounded-md">
                             Featured
                           </span>
                         )}
@@ -378,7 +382,7 @@ export default function Shop({ onCartClick }: ShopProps) {
                             e.stopPropagation();
                             toggleFavorite(product.id);
                           }}
-                          className="absolute top-2 right-2 p-1.5 sm:p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-sm hover:scale-110 transition-all"
+                          className="absolute top-2 right-2 p-1.5 sm:p-2 rounded-full bg-white/90 backdrop-blur-sm hover:scale-110 transition-all"
                         >
                           <Heart className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isFavorite(product.id) ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
                         </button>

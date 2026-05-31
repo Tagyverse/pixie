@@ -39,7 +39,7 @@ export default function MightYouLike({ onProductClick, onCartClick }: MightYouLi
         </div>
 
         <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4 lg:gap-5">
-          {products.map((product) => {
+          {products.map((product, index) => {
             const inCart = isInCart(product.id);
             const qty = getItemQuantity(product.id);
             const cartItemId = getCartItemId(product.id);
@@ -50,7 +50,8 @@ export default function MightYouLike({ onProductClick, onCartClick }: MightYouLi
             return (
               <div
                 key={product.id}
-                className="group bg-white rounded-xl border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 cursor-pointer"
+                className="card-stagger group bg-white rounded-xl border border-gray-100 overflow-hidden transition-all duration-300 hover:-translate-y-0.5 cursor-pointer"
+                style={{ animationDelay: `${index * 80}ms` }}
                 onClick={() => onProductClick(product)}
               >
                 <div className="relative aspect-square overflow-hidden bg-gray-50">
@@ -69,7 +70,7 @@ export default function MightYouLike({ onProductClick, onCartClick }: MightYouLi
                       e.stopPropagation();
                       toggleFavorite(product);
                     }}
-                    className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-white/90 p-1.5 rounded-full hover:bg-white transition-all shadow-sm"
+                    className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-white/90 p-1.5 rounded-full hover:bg-white transition-all"
                   >
                     <Heart
                       className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${
