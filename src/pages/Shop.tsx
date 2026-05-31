@@ -246,18 +246,14 @@ export default function Shop({ onCartClick }: ShopProps) {
                 <div className="flex flex-wrap lg:flex-col gap-1.5">
                   <button
                     onClick={() => setSelectedCategory(null)}
-                    className={`group relative px-3.5 py-1.5 text-xs font-medium tracking-wide uppercase transition-all duration-300 rounded-full ${
+                    className={`group relative px-3 py-1.5 text-[11px] sm:text-xs font-medium tracking-wide transition-all duration-300 rounded-full ${
                       selectedCategory === null
-                        ? 'bg-gray-900 text-white'
-                        : 'bg-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-100/80'
+                        ? 'bg-[#3D3321] text-white'
+                        : 'bg-[#F5EDE3] text-[#5C4A2F] hover:bg-[#EBE0D2] border border-[#D4C9B5]'
                     }`}
-                    style={{
-                      border: selectedCategory === null ? '1px solid #111827' : '1px solid transparent',
-                      letterSpacing: '0.05em',
-                    }}
                   >
                     <span className="relative flex items-center gap-1.5">
-                      {selectedCategory === null && <span className="w-1 h-1 rounded-full bg-teal-400" />}
+                      {selectedCategory === null && <span className="w-1 h-1 rounded-full bg-[#C4B590]" />}
                       All
                     </span>
                   </button>
@@ -265,18 +261,14 @@ export default function Shop({ onCartClick }: ShopProps) {
                     <button
                       key={category.id}
                       onClick={() => setSelectedCategory(category.id)}
-                      className={`group relative px-3.5 py-1.5 text-xs font-medium tracking-wide uppercase transition-all duration-300 rounded-full ${
+                      className={`group relative px-3 py-1.5 text-[11px] sm:text-xs font-medium tracking-wide transition-all duration-300 rounded-full ${
                         selectedCategory === category.id
-                          ? 'bg-gray-900 text-white'
-                          : 'bg-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-100/80'
+                          ? 'bg-[#3D3321] text-white'
+                          : 'bg-[#F5EDE3] text-[#5C4A2F] hover:bg-[#EBE0D2] border border-[#D4C9B5]'
                       }`}
-                      style={{
-                        border: selectedCategory === category.id ? '1px solid #111827' : '1px solid transparent',
-                        letterSpacing: '0.05em',
-                      }}
                     >
                       <span className="relative flex items-center gap-1.5">
-                        {selectedCategory === category.id && <span className="w-1 h-1 rounded-full bg-teal-400" />}
+                        {selectedCategory === category.id && <span className="w-1 h-1 rounded-full bg-[#C4B590]" />}
                         {category.name}
                       </span>
                     </button>

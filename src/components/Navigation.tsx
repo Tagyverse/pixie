@@ -129,13 +129,13 @@ export default function Navigation({ currentPage, onNavigate, onLoginClick, onCa
   return (
     <nav className="w-full" style={{ backgroundColor: navStyle.background }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-center py-5 sm:py-6">
-          <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap justify-center">
+        <div className="flex items-center justify-center py-3 sm:py-4">
+          <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap justify-center">
             {/* Home - Active style */}
             <NavPill
               active={currentPage === 'home'}
               onClick={() => onNavigate('home')}
-              icon={<HomeIcon className="w-4 h-4" />}
+              icon={<HomeIcon className="w-3.5 h-3.5" />}
               label={buttonLabels.home}
               navStyle={navStyle}
             />
@@ -144,7 +144,7 @@ export default function Navigation({ currentPage, onNavigate, onLoginClick, onCa
             <NavPill
               active={currentPage === 'shop'}
               onClick={() => onNavigate('shop')}
-              icon={<Store className="w-4 h-4" />}
+              icon={<Store className="w-3.5 h-3.5" />}
               label={buttonLabels.shop}
               navStyle={navStyle}
             />
@@ -153,7 +153,7 @@ export default function Navigation({ currentPage, onNavigate, onLoginClick, onCa
             <NavPill
               active={false}
               onClick={() => setSearchOpen(true)}
-              icon={<Search className="w-4 h-4" />}
+              icon={<Search className="w-3.5 h-3.5" />}
               label={buttonLabels.search}
               navStyle={navStyle}
             />
@@ -162,7 +162,7 @@ export default function Navigation({ currentPage, onNavigate, onLoginClick, onCa
             <NavPill
               active={false}
               onClick={onCartClick}
-              icon={<ShoppingBag className="w-4 h-4" />}
+              icon={<ShoppingBag className="w-3.5 h-3.5" />}
               label={buttonLabels.cart}
               navStyle={navStyle}
               badge={itemCount > 0 ? itemCount : undefined}
@@ -173,7 +173,7 @@ export default function Navigation({ currentPage, onNavigate, onLoginClick, onCa
               <NavPill
                 active={false}
                 onClick={onOrdersClick}
-                icon={<Package className="w-4 h-4" />}
+                icon={<Package className="w-3.5 h-3.5" />}
                 label={buttonLabels.myOrders}
                 navStyle={navStyle}
               />
@@ -184,7 +184,7 @@ export default function Navigation({ currentPage, onNavigate, onLoginClick, onCa
               <NavPill
                 active={currentPage === 'admin'}
                 onClick={() => onNavigate('admin')}
-                icon={<Settings className="w-4 h-4" />}
+                icon={<Settings className="w-3.5 h-3.5" />}
                 label={buttonLabels.admin}
                 navStyle={navStyle}
               />
@@ -195,7 +195,7 @@ export default function Navigation({ currentPage, onNavigate, onLoginClick, onCa
               <NavPill
                 active={false}
                 onClick={() => signOut()}
-                icon={<LogOut className="w-4 h-4" />}
+                icon={<LogOut className="w-3.5 h-3.5" />}
                 label={buttonLabels.signOut}
                 navStyle={navStyle}
               />
@@ -203,7 +203,7 @@ export default function Navigation({ currentPage, onNavigate, onLoginClick, onCa
               <NavPill
                 active={false}
                 onClick={onLoginClick}
-                icon={<User className="w-4 h-4" />}
+                icon={<User className="w-3.5 h-3.5" />}
                 label={buttonLabels.login}
                 navStyle={navStyle}
               />
@@ -341,11 +341,11 @@ function NavPill({ active, onClick, icon, label, navStyle, badge }: NavPillProps
     <button
       onClick={onClick}
       className={`
-        relative inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-full
-        text-sm font-semibold transition-all duration-200
+        relative inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full
+        text-xs sm:text-sm font-medium transition-all duration-200
         ${active
-          ? 'shadow-md'
-          : 'border border-[#C4B590] hover:border-[#8B7D3C] hover:shadow-sm'
+          ? ''
+          : 'border border-[#D4C9B5] hover:border-[#8B7D3C]'
         }
       `}
       style={{
@@ -355,11 +355,11 @@ function NavPill({ active, onClick, icon, label, navStyle, badge }: NavPillProps
     >
       <span
         className={`
-          w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0
-          ${active ? 'border border-white/30' : 'border border-[#C4B590]'}
+          w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center flex-shrink-0
+          ${active ? 'border border-white/20' : 'border border-[#D4C9B5]'}
         `}
         style={{
-          backgroundColor: active ? 'rgba(255,255,255,0.15)' : '#FFFFFF',
+          backgroundColor: active ? 'rgba(255,255,255,0.12)' : '#FFFFFF',
           color: active ? '#FFFFFF' : '#6B5E3F',
         }}
       >
@@ -369,7 +369,7 @@ function NavPill({ active, onClick, icon, label, navStyle, badge }: NavPillProps
 
       {badge !== undefined && (
         <span
-          className="absolute -top-1.5 -right-1.5 w-5 h-5 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white"
+          className="absolute -top-1 -right-1 w-4 h-4 text-white text-[9px] font-bold rounded-full flex items-center justify-center border-2 border-white"
           style={{ backgroundColor: '#C4532A' }}
         >
           {badge}

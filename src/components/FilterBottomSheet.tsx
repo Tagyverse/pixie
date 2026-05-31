@@ -64,18 +64,14 @@ export default function FilterBottomSheet({
                     onCategorySelect(null);
                     onClose();
                   }}
-                  className={`px-3 py-1.5 text-[11px] font-medium tracking-wide uppercase transition-all duration-300 rounded-full ${
+                  className={`px-3 py-1.5 text-[11px] font-medium tracking-wide transition-all duration-300 rounded-full ${
                     selectedCategory === null
-                      ? 'bg-gray-900 text-white'
-                      : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100/80'
+                      ? 'bg-[#3D3321] text-white'
+                      : 'bg-[#F5EDE3] text-[#5C4A2F] hover:bg-[#EBE0D2] border border-[#D4C9B5]'
                   }`}
-                  style={{
-                    border: selectedCategory === null ? '1px solid #111827' : '1px solid #e5e7eb',
-                    letterSpacing: '0.05em',
-                  }}
                 >
                   <span className="flex items-center gap-1.5">
-                    {selectedCategory === null && <span className="w-1 h-1 rounded-full bg-teal-400" />}
+                    {selectedCategory === null && <span className="w-1 h-1 rounded-full bg-[#C4B590]" />}
                     All
                   </span>
                 </button>
@@ -86,18 +82,14 @@ export default function FilterBottomSheet({
                       onCategorySelect(category.id);
                       onClose();
                     }}
-                    className={`px-3 py-1.5 text-[11px] font-medium tracking-wide uppercase transition-all duration-300 rounded-full ${
+                    className={`px-3 py-1.5 text-[11px] font-medium tracking-wide transition-all duration-300 rounded-full ${
                       selectedCategory === category.id
-                        ? 'bg-gray-900 text-white'
-                        : 'text-gray-500 hover:text-gray-900 hover:bg-gray-100/80'
+                        ? 'bg-[#3D3321] text-white'
+                        : 'bg-[#F5EDE3] text-[#5C4A2F] hover:bg-[#EBE0D2] border border-[#D4C9B5]'
                     }`}
-                    style={{
-                      border: selectedCategory === category.id ? '1px solid #111827' : '1px solid #e5e7eb',
-                      letterSpacing: '0.05em',
-                    }}
                   >
                     <span className="flex items-center gap-1.5">
-                      {selectedCategory === category.id && <span className="w-1 h-1 rounded-full bg-teal-400" />}
+                      {selectedCategory === category.id && <span className="w-1 h-1 rounded-full bg-[#C4B590]" />}
                       {category.name}
                     </span>
                   </button>
