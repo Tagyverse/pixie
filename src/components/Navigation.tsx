@@ -129,9 +129,9 @@ export default function Navigation({ currentPage, onNavigate, onLoginClick, onCa
   return (
     <nav className="w-full bg-white">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-center py-2.5 sm:py-3">
-          <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap justify-center">
-            {/* Home - Active style */}
+        <div className="flex flex-col items-center py-2.5 sm:py-3 gap-1.5">
+          {/* Top row - 3 chips */}
+          <div className="flex items-center gap-1.5 sm:gap-2 justify-center">
             <NavPill
               active={currentPage === 'home'}
               onClick={() => onNavigate('home')}
@@ -139,8 +139,6 @@ export default function Navigation({ currentPage, onNavigate, onLoginClick, onCa
               label={buttonLabels.home}
               navStyle={navStyle}
             />
-
-            {/* Shop All */}
             <NavPill
               active={currentPage === 'shop'}
               onClick={() => onNavigate('shop')}
@@ -148,8 +146,6 @@ export default function Navigation({ currentPage, onNavigate, onLoginClick, onCa
               label={buttonLabels.shop}
               navStyle={navStyle}
             />
-
-            {/* Search */}
             <NavPill
               active={false}
               onClick={() => setSearchOpen(true)}
@@ -157,8 +153,10 @@ export default function Navigation({ currentPage, onNavigate, onLoginClick, onCa
               label={buttonLabels.search}
               navStyle={navStyle}
             />
+          </div>
 
-            {/* Cart */}
+          {/* Bottom row - 2 chips */}
+          <div className="flex items-center gap-1.5 sm:gap-2 justify-center">
             <NavPill
               active={false}
               onClick={onCartClick}
@@ -168,37 +166,38 @@ export default function Navigation({ currentPage, onNavigate, onLoginClick, onCa
               badge={itemCount > 0 ? itemCount : undefined}
             />
 
-            {/* Orders (logged in) */}
-            {user && (
-              <NavPill
-                active={false}
-                onClick={onOrdersClick}
-                icon={<Package className="w-3.5 h-3.5" />}
-                label={buttonLabels.myOrders}
-                navStyle={navStyle}
-              />
-            )}
-
-            {/* Admin (if admin user or dev) */}
-            {user && (isAdmin || isDevelopment) && (
-              <NavPill
-                active={currentPage === 'admin'}
-                onClick={() => onNavigate('admin')}
-                icon={<Settings className="w-3.5 h-3.5" />}
-                label={buttonLabels.admin}
-                navStyle={navStyle}
-              />
-            )}
-
-            {/* Login / Sign Out */}
             {user ? (
-              <NavPill
-                active={false}
-                onClick={() => signOut()}
-                icon={<LogOut className="w-3.5 h-3.5" />}
-                label={buttonLabels.signOut}
-                navStyle={navStyle}
-              />
+              <>
+                <NavPill
+                  active={false}
+                  onClick={onOrdersClick}
+                  icon={<Package className="w-3.5 h-3.5" />}
+                  label={buttonLabels.myOrders}
+                  navStyle={navStyle}
+                />
+                {(isAdmin || isDevelopment) && (
+                  <NavPill
+                    active={currentPage === 'admin'}
+                    onClick={() => onNavigate('admin')}
+                    icon={<Settings className="w-3.5 h-3.5" />}
+                    label={buttonLabels.admin}
+                    navStyle={navStyle}
+                  />
+                )}
+                <NavPill
+                  active={false}
+                  onClick={() => signOut()}
+                  icon={
+                    user.photoURL ? (
+                      <img src={user.photoURL} alt="" className="w-3.5 h-3.5 rounded-full object-cover" />
+                    ) : (
+                      <LogOut className="w-3.5 h-3.5" />
+                    )
+                  }
+                  label={user.displayName?.split(' ')[0] || buttonLabels.signOut}
+                  navStyle={navStyle}
+                />
+              </>
             ) : (
               <NavPill
                 active={false}
@@ -341,7 +340,7 @@ function NavPill({ active, onClick, icon, label, navStyle, badge }: NavPillProps
     <button
       onClick={onClick}
       className={`
-        relative inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full
+        relative inline-flex items-center gap-1.5 px-3 sm:px-4 py-2 sm:py-2.5 rounded-full
         text-[11px] sm:text-xs font-medium tracking-wide transition-all duration-300
         ${active
           ? 'shadow-sm'

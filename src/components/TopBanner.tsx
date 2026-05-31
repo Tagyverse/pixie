@@ -156,7 +156,7 @@ export default function TopBanner() {
           <img
             src="/image copy.png"
             alt="Header"
-            className="relative z-10 w-40 sm:w-52 md:w-60 object-contain mt-1 -mb-6 sm:-mb-8"
+            className="relative z-10 w-40 sm:w-52 md:w-60 object-contain mt-1 -mb-8 sm:-mb-10"
           />
         </div>
       )}
