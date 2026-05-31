@@ -341,10 +341,10 @@ function NavPill({ active, onClick, icon, label, navStyle, badge }: NavPillProps
     <button
       onClick={onClick}
       className={`
-        relative inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full
-        text-xs sm:text-sm font-medium transition-all duration-200
+        relative inline-flex items-center gap-2 px-3.5 sm:px-4.5 py-2 sm:py-2.5 rounded-full
+        text-xs sm:text-sm font-medium transition-all duration-250
         ${active
-          ? ''
+          ? 'ring-1 ring-[#C4B590]/40'
           : 'border border-[#D4C9B5] hover:border-[#8B7D3C]'
         }
       `}
@@ -355,21 +355,23 @@ function NavPill({ active, onClick, icon, label, navStyle, badge }: NavPillProps
     >
       <span
         className={`
-          w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center flex-shrink-0
-          ${active ? 'border border-white/20' : 'border border-[#D4C9B5]'}
+          w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center flex-shrink-0
+          ${active ? 'bg-white/20 border border-white/30' : 'border border-[#D4C9B5] bg-white'}
         `}
         style={{
-          backgroundColor: active ? 'rgba(255,255,255,0.12)' : '#FFFFFF',
           color: active ? '#FFFFFF' : '#6B5E3F',
         }}
       >
         {icon}
       </span>
       <span className="whitespace-nowrap">{label}</span>
+      {active && (
+        <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-4 h-0.5 rounded-full bg-[#C4B590]" />
+      )}
 
       {badge !== undefined && (
         <span
-          className="absolute -top-1 -right-1 w-4 h-4 text-white text-[9px] font-bold rounded-full flex items-center justify-center border-2 border-white"
+          className="absolute -top-1 -right-1 w-4.5 h-4.5 text-white text-[9px] font-bold rounded-full flex items-center justify-center border-2 border-white"
           style={{ backgroundColor: '#C4532A' }}
         >
           {badge}

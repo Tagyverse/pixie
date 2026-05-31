@@ -64,14 +64,14 @@ export default function FilterBottomSheet({
                     onCategorySelect(null);
                     onClose();
                   }}
-                  className={`px-3 py-1.5 text-[11px] font-medium tracking-wide transition-all duration-300 rounded-full ${
+                  className={`px-3.5 py-2 text-[11px] font-medium tracking-wide transition-all duration-300 rounded-full ${
                     selectedCategory === null
-                      ? 'bg-[#3D3321] text-white'
+                      ? 'bg-[#3D3321] text-white ring-1 ring-[#C4B590]/40'
                       : 'bg-[#F5EDE3] text-[#5C4A2F] hover:bg-[#EBE0D2] border border-[#D4C9B5]'
                   }`}
                 >
                   <span className="flex items-center gap-1.5">
-                    {selectedCategory === null && <span className="w-1 h-1 rounded-full bg-[#C4B590]" />}
+                    {selectedCategory === null && <span className="w-1.5 h-1.5 rounded-full bg-[#C4B590] animate-[pulse_2s_ease-in-out_infinite]" />}
                     All
                   </span>
                 </button>
@@ -82,14 +82,14 @@ export default function FilterBottomSheet({
                       onCategorySelect(category.id);
                       onClose();
                     }}
-                    className={`px-3 py-1.5 text-[11px] font-medium tracking-wide transition-all duration-300 rounded-full ${
+                    className={`px-3.5 py-2 text-[11px] font-medium tracking-wide transition-all duration-300 rounded-full ${
                       selectedCategory === category.id
-                        ? 'bg-[#3D3321] text-white'
+                        ? 'bg-[#3D3321] text-white ring-1 ring-[#C4B590]/40'
                         : 'bg-[#F5EDE3] text-[#5C4A2F] hover:bg-[#EBE0D2] border border-[#D4C9B5]'
                     }`}
                   >
                     <span className="flex items-center gap-1.5">
-                      {selectedCategory === category.id && <span className="w-1 h-1 rounded-full bg-[#C4B590]" />}
+                      {selectedCategory === category.id && <span className="w-1.5 h-1.5 rounded-full bg-[#C4B590] animate-[pulse_2s_ease-in-out_infinite]" />}
                       {category.name}
                     </span>
                   </button>
