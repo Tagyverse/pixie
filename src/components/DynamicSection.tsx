@@ -130,7 +130,7 @@ export default function DynamicSection({ section, onProductClick, onCategoryClic
         }`}
       >
         <div
-          className={`relative bg-white overflow-hidden transition-all duration-300 ${cardStyles.container || 'rounded-2xl border-2 border-gray-100 hover:border-teal-300 hover:shadow-lg'}`}
+          className={`relative bg-white overflow-hidden ${cardStyles.container || 'rounded-2xl border-2 border-gray-100'}`}
           style={{
             ...cardStyles.style,
             transform: 'translateY(0)'
@@ -148,7 +148,7 @@ export default function DynamicSection({ section, onProductClick, onCategoryClic
             <LazyImage
               src={item.image_url}
               alt={item.name}
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+              className="w-full h-full object-cover"
             />
             {isProduct && product && (
               <>

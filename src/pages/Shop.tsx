@@ -322,7 +322,7 @@ export default function Shop({ onCartClick }: ShopProps) {
               </div>
             ) : products.length === 0 ? (
               <div className="text-center py-20 bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200">
-                <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
+                <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
                   <X className="w-10 h-10 text-gray-300" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">No products found</h3>
@@ -341,16 +341,8 @@ export default function Shop({ onCartClick }: ShopProps) {
                   return (
                     <div
                       key={product.id}
-                      className={`group bg-white overflow-hidden transition-all duration-300 ${cardStyles.container || 'border border-gray-100 rounded-2xl'}`}
+                      className={`group bg-white overflow-hidden ${cardStyles.container || 'border border-gray-100 rounded-2xl'}`}
                       style={cardStyles.style}
-                      onMouseEnter={(e) => {
-                        if (cardStyles.hoverTransform) {
-                          e.currentTarget.style.transform = cardStyles.hoverTransform;
-                        }
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = '';
-                      }}
                     >
                       <div
                         className="aspect-square overflow-hidden relative cursor-pointer"
@@ -363,7 +355,7 @@ export default function Shop({ onCartClick }: ShopProps) {
                         <LazyImage
                           src={product.image_url}
                           alt={product.name}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          className="w-full h-full object-cover"
                         />
                         {product.featured && (
                           <span className="absolute top-2 left-2 bg-white/90 backdrop-blur-sm text-[10px] sm:text-xs font-semibold text-gray-700 px-2 py-0.5 rounded-md">
@@ -380,13 +372,13 @@ export default function Shop({ onCartClick }: ShopProps) {
                             e.stopPropagation();
                             toggleFavorite(product.id);
                           }}
-                          className="absolute top-2 right-2 p-1.5 sm:p-2 rounded-full bg-white/90 backdrop-blur-sm hover:scale-110 transition-all"
+                          className="absolute top-2 right-2 p-1.5 sm:p-2 rounded-full bg-white/90 backdrop-blur-sm transition-colors"
                         >
                           <Heart className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isFavorite(product.id) ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
                         </button>
                         {!product.in_stock && (
                           <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] flex items-center justify-center">
-                            <span className="bg-white text-gray-900 px-3 py-1.5 rounded-lg font-bold text-xs sm:text-sm shadow-xl">Out of Stock</span>
+                            <span className="bg-white text-gray-900 px-3 py-1.5 rounded-lg font-bold text-xs sm:text-sm">Out of Stock</span>
                           </div>
                         )}
                       </div>

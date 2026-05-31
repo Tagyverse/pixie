@@ -503,7 +503,7 @@ export default function Home({ onNavigate, onCartClick }: HomeProps) {
                     <button
                       key={category.id}
                       onClick={() => onNavigate('shop', category.id)}
-                      className={`chip-animate group relative bg-white overflow-hidden transition-all duration-500 border-2 border-gray-100 ${allCategoriesCardStyles.container || 'rounded-3xl'}`}
+                      className={`chip-animate group relative bg-white overflow-hidden border-2 border-gray-100 ${allCategoriesCardStyles.container || 'rounded-3xl'}`}
                       style={{
                         ...allCategoriesCardStyles.style,
                         backgroundColor: category.bg_color || '#ffffff',
@@ -514,7 +514,7 @@ export default function Home({ onNavigate, onCartClick }: HomeProps) {
                         <LazyImage
                           src={category.image_url}
                           alt={category.name}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                          className="w-full h-full object-cover"
                         />
                       </div>
                       <div className="p-4">
@@ -655,12 +655,12 @@ export default function Home({ onNavigate, onCartClick }: HomeProps) {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            <div className="group relative bg-white rounded-3xl overflow-hidden border-2 border-teal-200 hover:border-teal-400 transition-all duration-500 transform hover:-translate-y-2">
+            <div className="group relative bg-white rounded-3xl overflow-hidden border-2 border-teal-200 transition-all duration-500">
               <div className="absolute inset-0 bg-gradient-to-br from-teal-500/10 via-teal-400/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <div className="relative p-8 sm:p-10 lg:p-12">
                 <div className="relative inline-flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 mb-6 sm:mb-8">
-                  <div className="absolute inset-0 bg-gradient-to-br from-teal-400 to-teal-600 rounded-2xl rotate-6 group-hover:rotate-12 transition-transform duration-500"></div>
-                  <div className="relative bg-white rounded-2xl w-full h-full flex items-center justify-center group-hover:scale-110 transition-transform duration-500 border-2 border-teal-200">
+                  <div className="absolute inset-0 bg-gradient-to-br from-teal-400 to-teal-600 rounded-2xl rotate-6 transition-transform duration-500"></div>
+                  <div className="relative bg-white rounded-2xl w-full h-full flex items-center justify-center transition-transform duration-500 border-2 border-teal-200">
                     <Heart className="w-10 h-10 sm:w-12 sm:h-12 text-teal-600 fill-teal-600" />
                   </div>
                 </div>
@@ -674,12 +674,12 @@ export default function Home({ onNavigate, onCartClick }: HomeProps) {
               </div>
             </div>
 
-            <div className="group relative bg-white rounded-3xl overflow-hidden border-2 border-rose-200 hover:border-rose-400 transition-all duration-500 transform hover:-translate-y-2">
+            <div className="group relative bg-white rounded-3xl overflow-hidden border-2 border-rose-200 transition-all duration-500">
               <div className="absolute inset-0 bg-gradient-to-br from-rose-500/10 via-rose-400/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <div className="relative p-8 sm:p-10 lg:p-12">
                 <div className="relative inline-flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 mb-6 sm:mb-8">
-                  <div className="absolute inset-0 bg-gradient-to-br from-rose-400 to-rose-600 rounded-2xl rotate-6 group-hover:rotate-12 transition-transform duration-500"></div>
-                  <div className="relative bg-white rounded-2xl w-full h-full flex items-center justify-center group-hover:scale-110 transition-transform duration-500 border-2 border-rose-200">
+                  <div className="absolute inset-0 bg-gradient-to-br from-rose-400 to-rose-600 rounded-2xl rotate-6 transition-transform duration-500"></div>
+                  <div className="relative bg-white rounded-2xl w-full h-full flex items-center justify-center transition-transform duration-500 border-2 border-rose-200">
                     <Sparkles className="w-10 h-10 sm:w-12 sm:h-12 text-rose-600" />
                   </div>
                 </div>

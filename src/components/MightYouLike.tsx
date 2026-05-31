@@ -50,7 +50,7 @@ export default function MightYouLike({ onProductClick, onCartClick }: MightYouLi
             return (
               <div
                 key={product.id}
-                className="group bg-white rounded-xl border border-gray-100 overflow-hidden transition-all duration-300 hover:-translate-y-0.5 cursor-pointer"
+                className="group bg-white rounded-xl border border-gray-100 overflow-hidden cursor-pointer"
                 style={{ animationDelay: `${index * 80}ms` }}
                 onClick={() => onProductClick(product)}
               >
@@ -58,7 +58,7 @@ export default function MightYouLike({ onProductClick, onCartClick }: MightYouLi
                   <LazyImage
                     src={product.image_url}
                     alt={product.name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="w-full h-full object-cover"
                   />
                   {discount > 0 && (
                     <span className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 bg-red-500 text-white text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded-md">
