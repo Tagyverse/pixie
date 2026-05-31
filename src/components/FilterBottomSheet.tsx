@@ -64,13 +64,23 @@ export default function FilterBottomSheet({
                     onCategorySelect(null);
                     onClose();
                   }}
-                  className={`block w-full text-left px-5 py-3 rounded-xl font-medium transition-all ${
+                  className={`block w-full text-left px-4 py-2 text-sm font-medium transition-all duration-300 ${
                     selectedCategory === null
-                      ? 'bg-teal-500 text-white border-2 border-teal-600'
-                      : 'text-gray-700 hover:bg-teal-50 border-2 border-transparent'
+                      ? 'text-white shadow-lg shadow-teal-500/25'
+                      : 'text-gray-700 hover:bg-teal-50/60'
                   }`}
+                  style={{
+                    borderRadius: '50px',
+                    border: selectedCategory === null ? 'none' : '1.5px solid #e5e7eb',
+                    background: selectedCategory === null
+                      ? 'linear-gradient(135deg, #0d9488, #14b8a6, #2dd4bf)'
+                      : undefined,
+                  }}
                 >
-                  All Products
+                  <span className="flex items-center gap-2">
+                    {selectedCategory === null && <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />}
+                    All Products
+                  </span>
                 </button>
                 {categories.map((category) => (
                   <button
@@ -79,13 +89,23 @@ export default function FilterBottomSheet({
                       onCategorySelect(category.id);
                       onClose();
                     }}
-                    className={`block w-full text-left px-5 py-3 rounded-xl font-medium transition-all ${
+                    className={`block w-full text-left px-4 py-2 text-sm font-medium transition-all duration-300 ${
                       selectedCategory === category.id
-                        ? 'bg-teal-500 text-white border-2 border-teal-600'
-                        : 'text-gray-700 hover:bg-teal-50 border-2 border-transparent'
+                        ? 'text-white shadow-lg shadow-teal-500/25'
+                        : 'text-gray-700 hover:bg-teal-50/60'
                     }`}
+                    style={{
+                      borderRadius: '50px',
+                      border: selectedCategory === category.id ? 'none' : '1.5px solid #e5e7eb',
+                      background: selectedCategory === category.id
+                        ? 'linear-gradient(135deg, #0d9488, #14b8a6, #2dd4bf)'
+                        : undefined,
+                    }}
                   >
-                    {category.name}
+                    <span className="flex items-center gap-2">
+                      {selectedCategory === category.id && <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />}
+                      {category.name}
+                    </span>
                   </button>
                 ))}
               </div>

@@ -6,7 +6,6 @@ import { CartProvider } from './contexts/CartContext';
 import { FavoritesProvider } from './contexts/FavoritesContext';
 import { PublishedDataProvider, usePublishedData } from './contexts/PublishedDataContext';
 import TopBanner from './components/TopBanner';
-import WelcomeBanner from './components/WelcomeBanner';
 import Navigation from './components/Navigation';
 import LoginModal from './components/LoginModal';
 import CartModal from './components/CartModal';
@@ -31,7 +30,7 @@ const RefundPolicy = lazy(() => import('./pages/RefundPolicy'));
 const Contact = lazy(() => import('./pages/Contact'));
 import type { Product } from './types';
 import { db } from './lib/firebase';
-import { ref, get, onValue } from 'firebase/database';
+import { ref, get } from 'firebase/database';
 import { initAnalytics, trackPageView } from './utils/analytics';
 import { initPerformanceMonitoring } from './utils/performanceMonitoring';
 import { initFetchInterceptor } from './utils/fetchInterceptor';
@@ -106,7 +105,6 @@ function AppContent() {
   const [showSplash, setShowSplash] = useState(true);
   const [appReady, setAppReady] = useState(false);
   const [temporarilyClosed, setTemporarilyClosed] = useState(false);
-  const [showWelcomeBanner, setShowWelcomeBanner] = useState(true);
 
   // Enable traffic tracking for all pages
   useTrafficTracking();
@@ -152,21 +150,11 @@ function AppContent() {
       }
     };
 
-    const visibilityRef = ref(db, 'default_sections_visibility/banner_social');
-    const unsubscribe = onValue(visibilityRef, (snapshot) => {
-      if (snapshot.exists()) {
-        setShowWelcomeBanner(snapshot.val());
-      } else {
-        setShowWelcomeBanner(true);
-      }
-    });
-
     checkStoreStatus();
     loadBillSettings();
     const interval = setInterval(checkStoreStatus, 30000);
     return () => {
       clearInterval(interval);
-      unsubscribe();
     };
   }, []);
 
@@ -333,7 +321,6 @@ function AppContent() {
           {!hideNavigation && (
             <>
               <TopBanner />
-              {showWelcomeBanner && <WelcomeBanner />}
               <Navigation
                 currentPage={currentPage}
                 onNavigate={handleNavigate}
