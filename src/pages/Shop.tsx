@@ -14,6 +14,7 @@ import FilterBottomSheet from '../components/FilterBottomSheet';
 import LazyImage from '../components/LazyImage';
 import SmartFeatureFAB from '../components/SmartFeatureFAB';
 import Confetti from '../components/Confetti';
+import { playAddToCartSound } from '../utils/sounds';
 import ColorMatchProductList from '../components/ColorMatchProductList';
 import WhatsAppFAB from '../components/WhatsAppFAB';
 import { onValue } from 'firebase/database';
@@ -196,6 +197,7 @@ export default function Shop({ onCartClick }: ShopProps) {
     const y = ((rect.top + rect.height / 2) / window.innerHeight) * 100;
     setConfettiOrigin({ x, y });
     setConfettiActive(true);
+    playAddToCartSound();
     const activeSize = selectedSizes[product.id] || (product.sizes && product.sizes[0]) || '';
     if (activeSize && product.size_pricing?.[activeSize]) {
       addToCart({ ...product, price: product.size_pricing[activeSize].price, default_size: activeSize });
@@ -427,7 +429,7 @@ export default function Shop({ onCartClick }: ShopProps) {
 
                       <div className="p-2.5 sm:p-3.5">
                         <h3
-                          className="font-semibold text-gray-900 text-xs sm:text-sm leading-tight line-clamp-2 mb-1.5 cursor-pointer"
+                          className="font-serif text-gray-900 text-xs sm:text-sm leading-tight line-clamp-2 mb-1.5 cursor-pointer"
                           onClick={() => {
                             setSelectedProduct(product);
                             setShowProductDetails(true);

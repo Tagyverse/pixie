@@ -680,20 +680,11 @@ export default function ProductDetailsSheet({ product, isOpen, onClose, onCartCl
                   )}
 
                   {product.sizes && product.sizes.length > 0 && (
-                    <div className="p-5 rounded-xl border-2 shadow-sm" style={{
-                      backgroundColor: '#ffffff',
-                      borderColor: '#A8D5BA'
-                    }}>
-                      <h3 className="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
-                        <div className="w-1 h-5 rounded-full shadow-sm" style={{ background: 'linear-gradient(to bottom, #76BCAA, #8FC9AA)' }}></div>
-                        Size: <span className="font-semibold" style={{
-                          background: 'linear-gradient(to right, #5FA587, #76BCAA)',
-                          WebkitBackgroundClip: 'text',
-                          WebkitTextFillColor: 'transparent',
-                          backgroundClip: 'text'
-                        }}>{selectedSize || 'Select'}</span>
+                    <div className="mb-4">
+                      <h3 className="text-sm font-medium text-gray-600 mb-2.5">
+                        Size: <span className="font-semibold text-gray-900">{selectedSize || product.sizes[0]}</span>
                       </h3>
-                      <div className="flex flex-wrap gap-3">
+                      <div className="flex flex-wrap gap-2">
                         {product.sizes.map((size, index) => {
                           const isSelected = selectedSize === size;
 
@@ -701,16 +692,11 @@ export default function ProductDetailsSheet({ product, isOpen, onClose, onCartCl
                             <button
                               key={index}
                               onClick={() => setSelectedSize(size)}
-                              className={`min-w-[3.5rem] px-5 py-3 rounded-lg font-bold text-sm transition-all duration-300 border-2 ${
+                              className={`px-4 py-2 rounded-lg text-sm font-medium border-2 transition-colors ${
                                 isSelected
-                                  ? 'text-white ring-3 shadow-lg'
-                                  : 'bg-white text-gray-700 border-gray-300 hover:shadow-md'
+                                  ? 'bg-gray-900 text-white border-gray-900'
+                                  : 'bg-white text-gray-700 border-gray-200'
                               }`}
-                              style={isSelected ? {
-                                background: 'linear-gradient(to right, #76BCAA, #8FC9AA)',
-                                borderColor: '#5FA587',
-                                boxShadow: '0 0 0 3px rgba(168, 213, 186, 0.3), 0 10px 15px -3px rgba(118, 188, 170, 0.4)'
-                              } : {}}
                             >
                               {size}
                             </button>

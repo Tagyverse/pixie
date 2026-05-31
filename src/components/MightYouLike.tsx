@@ -6,6 +6,7 @@ import { useFavorites } from '../contexts/FavoritesContext';
 import type { Product } from '../types';
 import LazyImage from './LazyImage';
 import Confetti from './Confetti';
+import { playAddToCartSound } from '../utils/sounds';
 import { objectToArray } from '../utils/publishedData';
 
 interface MightYouLikeProps {
@@ -28,6 +29,7 @@ export default function MightYouLike({ onProductClick, onCartClick }: MightYouLi
     const y = ((rect.top + rect.height / 2) / window.innerHeight) * 100;
     setConfettiOrigin({ x, y });
     setConfettiActive(true);
+    playAddToCartSound();
     addToCart(product);
   }, [addToCart]);
 
@@ -116,7 +118,7 @@ export default function MightYouLike({ onProductClick, onCartClick }: MightYouLi
                 </div>
 
                 <div className="p-2.5 sm:p-3">
-                  <h3 className="font-medium text-gray-900 text-xs sm:text-sm leading-tight line-clamp-2 mb-1.5">
+                  <h3 className="font-serif text-gray-900 text-xs sm:text-sm leading-tight line-clamp-2 mb-1.5">
                     {product.name}
                   </h3>
 

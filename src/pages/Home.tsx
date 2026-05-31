@@ -645,52 +645,38 @@ export default function Home({ onNavigate, onCartClick }: HomeProps) {
         </section>
       ))}
 
-      <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white">
+      <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8 sm:mb-10">
-            <span className="text-xs sm:text-sm font-semibold text-teal-600 tracking-widest uppercase">Why Choose Us</span>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mt-3 sm:mt-4 mb-3 sm:mb-4">
+            <span className="text-xs sm:text-sm font-medium text-gray-500 tracking-widest uppercase">Why Choose Us</span>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mt-3">
               The Pixie Blooms Promise
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            <div className="group relative bg-white rounded-3xl overflow-hidden border-2 border-teal-200 transition-all duration-500">
-              <div className="absolute inset-0 bg-gradient-to-br from-teal-500/10 via-teal-400/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <div className="relative p-8 sm:p-10 lg:p-12">
-                <div className="relative inline-flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 mb-6 sm:mb-8">
-                  <div className="absolute inset-0 bg-gradient-to-br from-teal-400 to-teal-600 rounded-2xl rotate-6 transition-transform duration-500"></div>
-                  <div className="relative bg-white rounded-2xl w-full h-full flex items-center justify-center transition-transform duration-500 border-2 border-teal-200">
-                    <Heart className="w-10 h-10 sm:w-12 sm:h-12 text-teal-600 fill-teal-600" />
-                  </div>
-                </div>
-                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 group-hover:text-teal-600 transition-colors">
-                  Handmade with Love
-                </h3>
-                <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
-                  Every piece is meticulously crafted by hand, ensuring unique quality and character in each accessory
-                </p>
-                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-teal-400 to-teal-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+            <div className="bg-white rounded-2xl p-6 sm:p-8 border border-gray-100">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-teal-50 flex items-center justify-center mb-5">
+                <Heart className="w-6 h-6 sm:w-7 sm:h-7 text-teal-600 fill-teal-600" />
               </div>
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
+                Handmade with Love
+              </h3>
+              <p className="text-gray-500 text-sm sm:text-base leading-relaxed">
+                Every piece is meticulously crafted by hand, ensuring unique quality and character in each accessory
+              </p>
             </div>
 
-            <div className="group relative bg-white rounded-3xl overflow-hidden border-2 border-rose-200 transition-all duration-500">
-              <div className="absolute inset-0 bg-gradient-to-br from-rose-500/10 via-rose-400/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <div className="relative p-8 sm:p-10 lg:p-12">
-                <div className="relative inline-flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 mb-6 sm:mb-8">
-                  <div className="absolute inset-0 bg-gradient-to-br from-rose-400 to-rose-600 rounded-2xl rotate-6 transition-transform duration-500"></div>
-                  <div className="relative bg-white rounded-2xl w-full h-full flex items-center justify-center transition-transform duration-500 border-2 border-rose-200">
-                    <Sparkles className="w-10 h-10 sm:w-12 sm:h-12 text-rose-600" />
-                  </div>
-                </div>
-                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 group-hover:text-rose-600 transition-colors">
-                  Premium Quality
-                </h3>
-                <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
-                  We source only the finest materials to create accessories that last and look beautiful every day
-                </p>
-                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-rose-400 to-rose-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+            <div className="bg-white rounded-2xl p-6 sm:p-8 border border-gray-100">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-amber-50 flex items-center justify-center mb-5">
+                <Sparkles className="w-6 h-6 sm:w-7 sm:h-7 text-amber-600" />
               </div>
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
+                Premium Quality
+              </h3>
+              <p className="text-gray-500 text-sm sm:text-base leading-relaxed">
+                We source only the finest materials to create accessories that last and look beautiful every day
+              </p>
             </div>
           </div>
         </div>

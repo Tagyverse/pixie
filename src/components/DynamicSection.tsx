@@ -4,6 +4,7 @@ import { Product, Category, HomepageSection } from '../types';
 import { usePublishedData } from '../contexts/PublishedDataContext';
 import LazyImage from './LazyImage';
 import Confetti from './Confetti';
+import { playAddToCartSound } from '../utils/sounds';
 import { useCart } from '../contexts/CartContext';
 import { useFavorites } from '../contexts/FavoritesContext';
 import { useCardDesign, getCardStyles } from '../hooks/useCardDesign';
@@ -92,6 +93,7 @@ export default function DynamicSection({ section, onProductClick, onCategoryClic
     const y = ((rect.top + rect.height / 2) / window.innerHeight) * 100;
     setConfettiOrigin({ x, y });
     setConfettiActive(true);
+    playAddToCartSound();
     const activeSize = selectedSizes[product.id] || (product.sizes && product.sizes[0]) || '';
     if (activeSize && product.size_pricing?.[activeSize]) {
       addToCart({ ...product, price: product.size_pricing[activeSize].price, default_size: activeSize });

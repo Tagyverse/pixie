@@ -22,6 +22,7 @@ export default function Navigation({ currentPage, onNavigate, onLoginClick, onCa
   const { itemCount, addToCart } = useCart();
   const { data: publishedData } = usePublishedData();
   const [searchOpen, setSearchOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
@@ -167,37 +168,62 @@ export default function Navigation({ currentPage, onNavigate, onLoginClick, onCa
             />
 
             {user ? (
-              <>
+              <div className="relative">
                 <NavPill
                   active={false}
-                  onClick={onOrdersClick}
-                  icon={<Package className="w-3.5 h-3.5" />}
-                  label={buttonLabels.myOrders}
-                  navStyle={navStyle}
-                />
-                {(isAdmin || isDevelopment) && (
-                  <NavPill
-                    active={currentPage === 'admin'}
-                    onClick={() => onNavigate('admin')}
-                    icon={<Settings className="w-3.5 h-3.5" />}
-                    label={buttonLabels.admin}
-                    navStyle={navStyle}
-                  />
-                )}
-                <NavPill
-                  active={false}
-                  onClick={() => signOut()}
+                  onClick={() => setUserMenuOpen(!userMenuOpen)}
                   icon={
                     user.photoURL ? (
                       <img src={user.photoURL} alt="" className="w-3.5 h-3.5 rounded-full object-cover" />
                     ) : (
-                      <LogOut className="w-3.5 h-3.5" />
+                      <User className="w-3.5 h-3.5" />
                     )
                   }
-                  label={user.displayName?.split(' ')[0] || buttonLabels.signOut}
+                  label={user.displayName?.split(' ')[0] || 'Account'}
                   navStyle={navStyle}
                 />
-              </>
+                {userMenuOpen && (
+                  <>
+                    <div className="fixed inset-0 z-40" onClick={() => setUserMenuOpen(false)}></div>
+                    <div className="absolute bottom-full mb-2 right-0 z-50 bg-white rounded-xl border border-gray-200 py-2 min-w-[180px] overflow-hidden">
+                      <button
+                        onClick={() => { onCartClick(); setUserMenuOpen(false); }}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                      >
+                        <ShoppingBag className="w-4 h-4 text-gray-500" />
+                        <span>My Cart</span>
+                        {itemCount > 0 && (
+                          <span className="ml-auto bg-teal-100 text-teal-700 text-[10px] font-bold px-1.5 py-0.5 rounded-full">{itemCount}</span>
+                        )}
+                      </button>
+                      <button
+                        onClick={() => { onOrdersClick(); setUserMenuOpen(false); }}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                      >
+                        <Package className="w-4 h-4 text-gray-500" />
+                        <span>My Orders</span>
+                      </button>
+                      {(isAdmin || isDevelopment) && (
+                        <button
+                          onClick={() => { onNavigate('admin'); setUserMenuOpen(false); }}
+                          className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                        >
+                          <Settings className="w-4 h-4 text-gray-500" />
+                          <span>Admin Panel</span>
+                        </button>
+                      )}
+                      <div className="border-t border-gray-100 my-1"></div>
+                      <button
+                        onClick={() => { signOut(); setUserMenuOpen(false); }}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        <span>Sign Out</span>
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
             ) : (
               <NavPill
                 active={false}

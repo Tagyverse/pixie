@@ -5,6 +5,7 @@ import { useCart } from '../contexts/CartContext';
 import { useFavorites } from '../contexts/FavoritesContext';
 import LazyImage from './LazyImage';
 import Confetti from './Confetti';
+import { playAddToCartSound } from '../utils/sounds';
 import type { Category, Product } from '../types';
 import { useCardDesign, getCardStyles } from '../hooks/useCardDesign';
 import { objectToArray } from '../utils/publishedData';
@@ -39,6 +40,7 @@ export default function FeaturedCategories({ onNavigate, onAddToCart, onCartClic
     const y = ((rect.top + rect.height / 2) / window.innerHeight) * 100;
     setConfettiOrigin({ x, y });
     setConfettiActive(true);
+    playAddToCartSound();
     addToCart(product);
   }, [addToCart]);
 
@@ -155,7 +157,7 @@ export default function FeaturedCategories({ onNavigate, onAddToCart, onCartClic
                     </div>
 
                     <div className="p-2.5 sm:p-3">
-                      <h3 className="font-medium text-gray-900 text-xs sm:text-sm leading-tight line-clamp-2 mb-1.5">
+                      <h3 className="font-serif text-gray-900 text-xs sm:text-sm leading-tight line-clamp-2 mb-1.5">
                         {product.name}
                       </h3>
 
